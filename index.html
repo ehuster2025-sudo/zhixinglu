@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的书架 - 个人阅读记录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --wood-dark: #3d2914;
+            --wood-medium: #5c3d1e;
+            --wood-light: #8b5a2b;
+            --paper: #f5f0e6;
+            --paper-dark: #e8e0d0;
+            --accent: #c9a227;
+            --text: #2c2416;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1f16 50%, #1a0f0a 100%);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* 背景纹理 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139,90,43,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201,162,39,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 头部 */
+        header {
+            background: linear-gradient(180deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+            padding: 2rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            text-shadow: 2px 2px 4px var(--shadow);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--paper-dark);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 统计卡片 */
+        .stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--wood-light);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--paper-dark);
+            margin-top: 0.25rem;
+        }
+
+        /* 控制栏 */
+        .controls {
+            background: var(--wood-medium);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--wood-dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .controls-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--wood-light);
+            border-radius: 8px;
+            background: var(--paper);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201,162,39,0.2);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--wood-light);
+            background: transparent;
+            color: var(--paper);
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--wood-dark);
+        }
+
+        /* 书架区域 */
+        .bookshelf-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .shelf {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .shelf-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .shelf-board {
+            background: linear-gradient(180deg, var(--wood-medium) 0%, var(--wood-dark) 100%);
+            padding: 2rem 1.5rem 1rem;
+            border-radius: 4px 4px 8px 8px;
+            box-shadow: 
+                0 10px 30px var(--shadow),
+                inset 0 2px 0 rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .shelf-board::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(180deg, var(--wood-light) 0%, var(--wood-dark) 100%);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .books-row {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding-bottom: 1rem;
+        }
+
+        /* 书籍卡片 */
+        .book {
+            width: 140px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            transform-origin: bottom center;
+        }
+
+        .book:hover {
+            transform: translateY(-15px) scale(1.05);
+            z-index: 10;
+        }
+
+        .book-spine {
+            aspect-ratio: 2/3;
+            border-radius: 3px 6px 6px 3px;
+            box-shadow: 
+                -2px 0 5px rgba(0,0,0,0.3),
+                2px 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem 0.5rem;
+        }
+
+        /* 不同颜色的书脊 */
+        .book-spine.red { background: linear-gradient(90deg, #8b2635 0%, #a52a2a 50%, #8b2635 100%); }
+        .book-spine.blue { background: linear-gradient(90deg, #1e3a5f 0%, #2e5090 50%, #1e3a5f 100%); }
+        .book-spine.green { background: linear-gradient(90deg, #1e4d2b 0%, #2d6a4f 50%, #1e4d2b 100%); }
+        .book-spine.brown { background: linear-gradient(90deg, #4a3728 0%, #6b4423 50%, #4a3728 100%); }
+        .book-spine.navy { background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%); }
+        .book-spine.orange { background: linear-gradient(90deg, #8b4513 0%, #cd853f 50%, #8b4513 100%); }
+        .book-spine.purple { background: linear-gradient(90deg, #4a1e4e 0%, #6b2d6c 50%, #4a1e4e 100%); }
+        .book-spine.teal { background: linear-gradient(90deg, #1e4e4e 0%, #2d6b6b 50%, #1e4e4e 100%); }
+
+        .book-spine::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+        }
+
+        .book-spine::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+        }
+
+        .book-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.95);
+            text-align: center;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            margin: 0 auto;
+        }
+
+        .book-author {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .book-rating {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--accent);
+        }
+
+        /* 书籍详情弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--paper);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--wood-dark), var(--wood-medium));
+            padding: 1.5rem;
+            color: var(--paper);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-book-author {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .book-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--paper-dark);
+            border-radius: 8px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            color: var(--wood-dark);
+        }
+
+        .book-summary {
+            line-height: 1.8;
+            color: var(--text);
+            margin-top: 1rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--paper);
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--wood-light);
+            color: var(--paper);
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--wood-dark);
+            padding: 2rem;
+            text-align: center;
+            color: var(--paper-dark);
+            border-top: 3px solid var(--accent);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats {
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 0.75rem 1rem;
+            }
+
+            .book {
+                width: 100px;
+            }
+
+            .controls-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--paper-dark);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>我的书架</h1>
+                <div class="subtitle">记录每一本读过的书，收藏每一个思想的火花</div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalBooks">0</div>
+                    <div class="stat-label">已读书籍</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="thisYear">0</div>
+                    <div class="stat-label">今年阅读</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="avgRating">0</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="controls">
+        <div class="controls-content">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索书名、作者、标签...">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="文学">文学</button>
+                <button class="filter-btn" data-filter="历史">历史</button>
+                <button class="filter-btn" data-filter="哲学">哲学</button>
+                <button class="filter-btn" data-filter="科技">科技</button>
+                <button class="filter-btn" data-filter="商业">商业</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="bookshelf-container" id="bookshelf">
+        <!-- 书架内容将由JavaScript动态生成 -->
+    </main>
+
+    <!-- 书籍详情弹窗 -->
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <div class="modal-header" style="position: relative;">
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <div class="modal-book-title" id="modalTitle">书名</div>
+                <div class="modal-book-author" id="modalAuthor">作者</div>
+            </div>
+            <div class="modal-body">
+                <div class="book-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">阅读时间</div>
+                        <div class="meta-value" id="modalDate">2024</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">评分</div>
+                        <div class="meta-value" id="modalRating">★★★★★</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">分类</div>
+                        <div class="meta-value" id="modalCategory">文学</div>
+                    </div>
+                </div>
+                <div class="book-summary" id="modalSummary">
+                    书籍摘要内容...
+                </div>
+                <div class="tags" id="modalTags">
+                    <!-- 标签 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>我的个人书架 &copy; 2025 | 用阅读丈量世界</p>
+    </footer>
+
+    <script>
+        // 书籍数据
+        const booksData = [
+            {
+                id: 1,
+                title: "百年孤独",
+                author: "加西亚·马尔克斯",
+                category: "文学",
+                rating: 5,
+                date: "2024-01",
+                color: "green",
+                summary: "魔幻现实主义的巅峰之作，讲述了布恩迪亚家族七代人的传奇故事。书中融合了神话、传说与现实，展现了拉丁美洲百年来的历史变迁。孤独是全书的核心主题，每个人都在自己的孤独中挣扎。",
+                tags: ["诺贝尔奖", "魔幻现实主义", "经典"]
+            },
+            {
+                id: 2,
+                title: "人类简史",
+                author: "尤瓦尔·赫拉利",
+                category: "历史",
+                rating: 5,
+                date: "2024-02",
+                color: "brown",
+                summary: "从认知革命到科学革命，作者以宏大的视角梳理了人类发展的关键节点。书中提出的'虚构故事'概念令人深思，解释了人类如何通过共同的想象建立起复杂的社会结构。",
+                tags: ["大历史", "人类学", "畅销书"]
+            },
+            {
+                id: 3,
+                title: "三体",
+                author: "刘慈欣",
+                category: "科技",
+                rating: 5,
+                date: "2024-03",
+                color: "navy",
+                summary: "中国科幻文学的里程碑作品。从文革时期到宇宙末日，小说构建了一个宏大的宇宙图景。黑暗森林法则、降维打击等概念令人震撼，让人重新思考人类文明在宇宙中的位置。",
+                tags: ["科幻", "雨果奖", "硬科幻"]
+            },
+            {
+                id: 4,
+                title: "活着",
+                author: "余华",
+                category: "文学",
+                rating: 5,
+                date: "2024-01",
+                color: "red",
+                summary: "一个人一生的苦难史，却写出了生命的韧性。福贵经历了家道中落、战争、饥荒、亲人离世，却依然坚强地活着。余华用朴实的语言，讲述了一个人如何在苦难中寻找生存的意义。",
+                tags: ["当代文学", "苦难", "生命"]
+            },
+            {
+                id: 5,
+                title: "苏菲的世界",
+                author: "乔斯坦·贾德",
+                category: "哲学",
+                rating: 4,
+                date: "2024-04",
+                color: "blue",
+                summary: "一部以小说形式呈现的哲学史。通过苏菲收到神秘信件的故事，带领读者从古希腊哲学一路走到现代存在主义。是了解西方哲学的绝佳入门读物。",
+                tags: ["哲学入门", "西方哲学", "小说"]
+            },
+            {
+                id: 6,
+                title: "穷查理宝典",
+                author: "查理·芒格",
+                category: "商业",
+                rating: 5,
+                date: "2024-05",
+                color: "orange",
+                summary: "巴菲特搭档查理·芒格的智慧箴言录。书中阐述了多元思维模型的重要性，以及如何在投资和生活中运用跨学科知识。逆向思维、能力圈等概念对决策非常有启发。",
+                tags: ["投资", "思维模型", "智慧"]
+            },
+            {
+                id: 7,
+                title: "1984",
+                author: "乔治·奥威尔",
+                category: "文学",
+                rating: 5,
+                date: "2024-02",
+                color: "navy",
+                summary: "反乌托邦文学的经典之作。大洋国的极权统治、老大哥的监视、真理部的谎言，构成了一幅令人窒息的政治图景。'战争即和平，自由即奴役，无知即力量'的标语令人深思。",
+                tags: ["反乌托邦", "政治", "经典"]
+            },
+            {
+                id: 8,
+                title: "深度工作",
+                author: "卡尔·纽波特",
+                category: "商业",
+                rating: 4,
+                date: "2024-06",
+                color: "teal",
+                summary: "在碎片化的时代，深度工作的能力越来越稀缺。作者提出了培养深度工作能力的具体方法，包括工作仪式化、拥抱无聊、远离社交媒体等，对提升工作效率很有帮助。",
+                tags: ["效率", "专注力", "自我提升"]
+            },
+            {
+                id: 9,
+                title: "明朝那些事儿",
+                author: "当年明月",
+                category: "历史",
+                rating: 5,
+                date: "2024-03",
+                color: "red",
+                summary: "用现代语言讲述明朝三百年历史。作者以幽默风趣的笔调，将枯燥的历史变得生动有趣。从朱元璋到崇祯，每个皇帝、每个重要人物都被刻画得栩栩如生。",
+                tags: ["明史", "通俗历史", "畅销书"]
+            },
+            {
+                id: 10,
+                title: "沉默的大多数",
+                author: "王小波",
+                category: "文学",
+                rating: 5,
+                date: "2024-04",
+                color: "purple",
+                summary: "王小波的杂文代表作。他以独特的黑色幽默和理性精神，对当时的社会现象进行深刻批判。提倡独立思考，反对盲从，至今仍具有强烈的现实意义。",
+                tags: ["杂文", "思想", "批判"]
+            },
+            {
+                id: 11,
+                title: "黑客与画家",
+                author: "保罗·格雷厄姆",
+                category: "科技",
+                rating: 4,
+                date: "2024-05",
+                color: "orange",
+                summary: "硅谷创业教父的文集。书中探讨了黑客精神、创业、编程语言设计等话题。作者将黑客比作画家，强调编程也是一种创造性活动，对技术人员很有启发。",
+                tags: ["编程", "创业", "黑客文化"]
+            },
+            {
+                id: 12,
+                title: "被讨厌的勇气",
+                author: "岸见一郎",
+                category: "哲学",
+                rating: 4,
+                date: "2024-06",
+                color: "blue",
+                summary: "以对话形式介绍阿德勒心理学。书中提出了'课题分离'的概念，鼓励人们拥有被讨厌的勇气，不活在别人的期待中。对改善人际关系和自我接纳很有帮助。",
+                tags: ["心理学", "阿德勒", "自我成长"]
+            },
+            {
+                id: 13,
+                title: "置身事内",
+                author: "兰小欢",
+                category: "商业",
+                rating: 5,
+                date: "2024-07",
+                color: "brown",
+                summary: "复旦大学教授解读中国政府与经济发展。用通俗易懂的语言，解释了土地财政、招商引资、债务问题等经济现象，帮助读者理解中国经济的运行逻辑。",
+                tags: ["中国经济", "政府", "通俗经济学"]
+            },
+            {
+                id: 14,
+                title: "月亮与六便士",
+                author: "毛姆",
+                category: "文学",
+                rating: 4,
+                date: "2024-07",
+                color: "green",
+                summary: "以画家高更为原型创作的小说。主人公斯特里克兰德放弃了优渥的生活，追求绘画艺术。书中探讨了理想与现实的冲突，艺术与生活之间的矛盾。",
+                tags: ["艺术", "理想", "经典"]
+            },
+            {
+                id: 15,
+                title: "枪炮、病菌与钢铁",
+                author: "贾雷德·戴蒙德",
+                category: "历史",
+                rating: 5,
+                date: "2024-08",
+                color: "brown",
+                summary: "探讨人类社会发展不平衡的终极原因。作者从地理环境、农业起源、技术传播等角度，解释了为什么是欧亚文明征服了其他大陆，而非相反。",
+                tags: ["人类学", "地理决定论", "普利策奖"]
+            }
+        ];
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        // 初始化统计
+        function updateStats() {
+            const total = booksData.length;
+            const thisYear = booksData.filter(b => b.date.startsWith('2024')).length;
+            const avgRating = (booksData.reduce((sum, b) => sum + b.rating, 0) / total).toFixed(1);
+
+            document.getElementById('totalBooks').textContent = total;
+            document.getElementById('thisYear').textContent = thisYear;
+            document.getElementById('avgRating').textContent = avgRating;
+        }
+
+        // 按分类分组书籍
+        function groupBooksByCategory(books) {
+            const groups = {};
+            books.forEach(book => {
+                if (!groups[book.category]) {
+                    groups[book.category] = [];
+                }
+                groups[book.category].push(book);
+            });
+            return groups;
+        }
+
+        // 渲染书架
+        function renderBookshelf() {
+            const container = document.getElementById('bookshelf');
+            container.innerHTML = '';
+
+            // 过滤书籍
+            let filteredBooks = booksData;
+            
+            if (currentFilter !== 'all') {
+                filteredBooks = filteredBooks.filter(b => b.category === currentFilter);
+            }
+            
+            if (searchTerm) {
+                filteredBooks = filteredBooks.filter(b => 
+                    b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    b.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    b.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()))
+                );
+            }
+
+            if (filteredBooks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <p>没有找到匹配的书籍</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 按分类分组
+            const grouped = groupBooksByCategory(filteredBooks);
+
+            // 渲染每个分类
+            Object.entries(grouped).forEach(([category, books]) => {
+                const shelf = document.createElement('div');
+                shelf.className = 'shelf';
+                
+                const title = document.createElement('div');
+                title.className = 'shelf-title';
+                title.textContent = category + ' (' + books.length + '本)';
+                
+                const board = document.createElement('div');
+                board.className = 'shelf-board';
+                
+                const row = document.createElement('div');
+                row.className = 'books-row';
+                
+                books.forEach(book => {
+                    const bookEl = createBookElement(book);
+                    row.appendChild(bookEl);
+                });
+                
+                board.appendChild(row);
+                shelf.appendChild(title);
+                shelf.appendChild(board);
+                container.appendChild(shelf);
+            });
+        }
+
+        // 创建书籍元素
+        function createBookElement(book) {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = 'book';
+            bookDiv.onclick = () => openModal(book);
+            
+            const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+            
+            bookDiv.innerHTML = `
+                <div class="book-spine ${book.color}">
+                    <div class="book-title">${book.title}</div>
+                    <div class="book-author">${book.author}</div>
+                    <div class="book-rating">${stars}</div>
+                </div>
+            `;
+            
+            return bookDiv;
+        }
+
+        // 打开弹窗
+        function openModal(book) {
+            document.getElementById('modalTitle').textContent = book.title;
+            document.getElementById('modalAuthor').textContent = book.author;
+            document.getElementById('modalDate').textContent = book.date;
+            document.getElementById('modalRating').textContent = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+            document.getElementById('modalCategory').textContent = book.category;
+            document.getElementById('modalSummary').textContent = book.summary;
+            
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = book.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            
+            document.getElementById('bookModal').classList.add('active');
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('bookModal').classList.remove('active');
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // 筛选按钮事件
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                renderBookshelf();
+            });
+        });
+
+        // 搜索事件
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchTerm = this.value;
+            renderBookshelf();
+        });
+
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 初始化
+        updateStats();
+        renderBookshelf();
+    </script>
+</body>
+</html>
