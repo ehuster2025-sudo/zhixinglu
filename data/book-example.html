@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --bg-primary: #faf8f5;
+            --bg-secondary: #f5f2ed;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a5a;
+            --text-muted: #8a8a9a;
+            --accent-primary: #1a1a2e;
+            --accent-secondary: #8b7355;
+            --border: #e8e4df;
+            --shadow: 0 4px 12px -2px rgba(26, 26, 46, 0.08);
+            --shadow-lg: 0 12px 40px -8px rgba(26, 26, 46, 0.12);
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .article-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cover-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .info-card-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .key-points {
+            margin: 1.5rem 0;
+        }
+
+        .key-point-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: box-shadow 0.2s;
+        }
+
+        .key-point-item:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .key-point-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .key-point-content {
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .quote-block {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .quote-source {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .action-item {
+            background: var(--bg-secondary);
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .action-check {
+            color: var(--accent-secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .action-content {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.1) 0%, rgba(26, 26, 46, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight-content {
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .chapter-list {
+            margin: 1.5rem 0;
+        }
+
+        .chapter-item {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-secondary);
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .chapter-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-content {
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .reading-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .reading-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .reading-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .reading-author {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .reading-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <!-- 文章头部 -->
+        <div class="article-header">
+            <h1 class="article-title">《深度工作》</h1>
+            <p class="article-subtitle">在碎片化时代如何专注创造真正有价值的成果</p>
+            <div class="article-meta">
+                <span class="meta-item">卡尔·纽波特</span>
+                <span class="meta-item">2016年出版</span>
+                <span class="meta-item"> productivity</span>
+            </div>
+        </div>
+
+        <!-- 封面图片 -->
+        <img src="./data/deep-work-cover.jpg" alt="《深度工作》封面" class="cover-image">
+
+        <!-- 书籍基本信息 -->
+        <section class="article-section">
+            <h2 class="section-title">书籍基本信息</h2>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-label">作者</div>
+                        <div class="info-card-value">卡尔·纽波特 (Cal Newport)</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">出版社</div>
+                        <div class="info-card-value">Grand Central Publishing</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">出版年份</div>
+                        <div class="info-card-value">2016年</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">类别</div>
+                        <div class="info-card-value">生产力/个人成长</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心观点 -->
+        <section class="article-section">
+            <h2 class="section-title">核心观点</h2>
+            <div class="section-content">
+                <p>在这个信息碎片化的时代,<strong>深度工作</strong>(Deep Work)——在无干扰状态下专注进行的职业活动——正变得越来越稀缺,同时也越来越有价值。本书提出了一个核心假设:深度工作的能力正日益稀有,但其在经济中的价值却在不断上升。</p>
+                
+                <div class="key-points">
+                    <div class="key-point-item">
+                        <div class="key-point-title">深度工作假说</div>
+                        <div class="key-point-content">
+                            深度工作的能力正变得越来越稀缺,但与此同时,它在我们的经济中变得越来越有价值。那些培养这项技能然后将其作为工作生活核心的人将蓬勃发展。
+                        </div>
+                    </div>
+
+                    <div class="key-point-item">
+                        <div class="key-point-title">浅薄工作的代价</div>
+                        <div class="key-point-content">
+                            浅薄工作(非认知要求的、任务导向的工作)不仅对创造新价值贡献有限,而且最重要的是——它很容易复制和替代。
+                        </div>
+                    </div>
+
+                    <div class="key-point-item">
+                        <div class="key-point-title">深度工作的规则</div>
+                        <div class="key-point-content">
+                            要成功进行深度工作,需要建立严格的习惯和仪式,包括确定工作时间和地点、设定执行规则、支持你的选择,并消除浅薄工作。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 章节梳理 -->
+        <section class="article-section">
+            <h2 class="section-title">章节梳理</h2>
+            <div class="section-content">
+                <div class="chapter-list">
+                    <div class="chapter-item">
+                        <div class="chapter-title">第一部分:理念</div>
+                        <div class="chapter-content">
+                            阐述深度工作的定义、价值和稀缺性。通过比尔·盖茨、卡尔·荣格等案例,说明深度工作如何创造巨大价值。
+                        </div>
+                    </div>
+
+                    <div class="chapter-item">
+                        <div class="chapter-title">第二部分:准则</div>
+                        <div class="chapter-content">
+                            提供四个实用准则:工作要深入、拥抱无聊、远离社交媒体、摒弃浅薄。每个准则都包含具体的实践方法和心理学依据。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 金句摘录 -->
+        <section class="article-section">
+            <h2 class="section-title">金句摘录</h2>
+            <div class="section-content">
+                <div class="quote-block">
+                    <p class="quote-text">"高质量的工作产出 = 花费的时间 × 专注的程度"</p>
+                    <p class="quote-source">—— 第一章</p>
+                </div>
+
+                <div class="quote-block">
+                    <p class="quote-text">"在你的头脑中占据一天大部分时间的东西,将决定你对生活质量的感知。"</p>
+                    <p class="quote-source">—— 第二章</p>
+                </div>
+
+                <div class="quote-block">
+                    <p class="quote-text">"深度工作是一种超能力。在像我们这样快速变化的经济时代,它有三个关键优势:快速学习复杂事物的能力、在更高水平上产出的能力、以及拥有真正稀缺技能的杠杆效应。"</p>
+                    <p class="quote-source">—— 引言</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实践指南 -->
+        <section class="article-section">
+            <h2 class="section-title">实践指南</h2>
+            <div class="section-content">
+                <p>以下是书中提供的核心实践方法,建议逐步尝试并找到适合自己的方式:</p>
+                
+                <ul class="action-list">
+                    <li class="action-item">
+                        <span class="action-check">✓</span>
+                        <span class="action-content"><strong>确定你的深度工作哲学</strong>: 选择禁欲主义(完全隔离)、双峰模式(周期性深度)、节奏模式(固定时间段)或记者模式(随时切换)</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="action-check">✓</span>
+                        <span class="action-content"><strong>建立深度工作仪式</strong>: 确定固定的时间、地点和规则,让大脑形成习惯</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="action-check">✓</span>
+                        <span class="action-content"><strong>拥抱无聊</strong>: 不要一感到无聊就拿起手机,训练自己忍受没有刺激的状态</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="action-check">✓</span>
+                        <span class="action-content"><strong>远离社交媒体</strong>: 对网络工具进行"任何益处法"测试,只保留收益远大于成本的</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="action-check">✓</span>
+                        <span class="action-content"><strong>减少浅薄工作</strong>: 严格限制花在邮件、会议等浅薄工作上的时间,为深度工作留出空间</span>
+                    </li>
+                </ul>
+
+                <div class="highlight-box">
+                    <div class="highlight-title">💡核心建议</div>
+                    <div class="highlight-content">
+                        不要试图一次性改变所有习惯。选择一个准则开始,坚持几周,等它成为自然后再添加下一个。深度工作是一种需要训练的技能,而非一蹴而就的天赋。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="article-section">
+            <h2 class="section-title">延伸阅读</h2>
+            <div class="section-content">
+                <ul class="reading-list">
+                    <li class="reading-item">
+                        <div class="reading-title">《数字极简主义》</div>
+                        <div class="reading-author">卡尔·纽波特</div>
+                        <div class="reading-desc">同一作者的后续作品,更深入探讨如何在数字时代保持专注和自主权。</div>
+                    </li>
+                    <li class="reading-item">
+                        <div class="reading-title">《心流:最优体验心理学》</div>
+                        <div class="reading-author">米哈里·契克森米哈赖</div>
+                        <div class="reading-desc">从心理学角度解释专注状态的机制,与深度工作理念高度契合。</div>
+                    </li>
+                    <li class="reading-item">
+                        <div class="reading-title">《原子习惯》</div>
+                        <div class="reading-author">詹姆斯·克利尔</div>
+                        <div class="reading-desc">提供建立好习惯、打破坏习惯的系统方法,可作为深度工作实践的补充。</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </article>
+</body>
+</html>

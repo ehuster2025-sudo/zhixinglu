@@ -1,13 +1,1 @@
-[
-    {
-        "id": 1,
-        "title": "穷奇",
-        "subtitle": "抑善扬恶之兽，四大凶兽之一",
-        "tag": "凶兽",
-        "date": "2026-03",
-        "icon": "
-        "coverImage": "./data/qiongqi-cover.jpg",
-        "summary": "《山海经》中记载的四大凶兽之一，形如牛（或虎）而有翼，最独特之处在于其'抑善扬恶'的反道德行为逻辑——听闻人斗则食直者，闻人忠信则食其鼻，闻人恶逆不善则杀兽往馈之。",
-        "contentFile": "./data/qiongqi.html"
-    }
-]
+[]

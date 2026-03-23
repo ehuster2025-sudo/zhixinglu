@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .article-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cover-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .info-card-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--accent-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .quote-block {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .quote-source {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: normal;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.1) 0%, rgba(26, 26, 46, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight-content {
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 0.75rem;
+            background: var(--bg-card);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <!-- 文章头部 -->
+        <div class="article-header">
+            <h1 class="article-title">[历史人物姓名]</h1>
+            <p class="article-subtitle">[一句话概括其历史地位或特点]</p>
+            <div class="article-meta">
+                <span class="meta-item">生卒年份]</span>
+                <span class="meta-item"> [标签/身份]</span>
+                <span class="meta-item">主要活动地区]</span>
+            </div>
+        </div>
+
+        <!-- 封面图片 -->
+        <img src="[封面图片URL]" alt="[人物名称]画像" class="cover-image">
+
+        <!-- 基本信息 -->
+        <section class="article-section">
+            <h2 class="section-title">基本信息</h2>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-label">朝代/时代</div>
+                        <div class="info-card-value">[朝代信息]</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">字号</div>
+                        <div class="info-card-value">[字、号]</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">籍贯</div>
+                        <div class="info-card-value">[出生地]</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-label">主要成就</div>
+                        <div class="info-card-value">[核心成就]</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 生平事迹 -->
+        <section class="article-section">
+            <h2 class="section-title">生平事迹</h2>
+            <div class="section-content">
+                <p>[人物生平概述,包括出身背景、成长经历等]</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">[年份/时期]</div>
+                        <div class="timeline-content">[重要事件描述]</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">[年份/时期]</div>
+                        <div class="timeline-content">[重要事件描述]</div>
+                    </div>
+                    <!-- 更多时间线事件 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 主要贡献 -->
+        <section class="article-section">
+            <h2 class="section-title">主要贡献</h2>
+            <div class="section-content">
+                <p>[概述其主要贡献及其影响]</p>
+                <ul>
+                    <li><strong>[贡献一标题]</strong>: [具体描述]</li>
+                    <li><strong>[贡献二标题]</strong>: [具体描述]</li>
+                    <li><strong>[贡献三标题]</strong>: [具体描述]</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 经典言论/著作 -->
+        <section class="article-section">
+            <h2 class="section-title">经典言论/著作</h2>
+            <div class="section-content">
+                <div class="quote-block">
+                    <p class="quote-text">"[经典名言或著作摘录]"</p>
+                    <p class="quote-source">—— [出处]</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 历史评价 -->
+        <section class="article-section">
+            <h2 class="section-title">历史评价</h2>
+            <div class="section-content">
+                <p>[后世对该人物的评价和定位]</p>
+                <div class="highlight-box">
+                    <div class="highlight-title">后世影响</div>
+                    <div class="highlight-content">[描述其对后世的深远影响]</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关图片 -->
+        <section class="article-section">
+            <h2 class="section-title">相关图片</h2>
+            <div class="image-gallery">
+                <div class="gallery-item">
+                    <img src="[图片URL]" alt="[图片说明]">
+                    <div class="gallery-caption">[图片说明文字]</div>
+                </div>
+                <!-- 更多图片 -->
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="article-section">
+            <h2 class="section-title">延伸阅读</h2>
+            <div class="section-content">
+                <ul>
+                    <li><a href="[链接]" target="_blank">[相关文献或研究标题]</a></li>
+                    <li><a href="[链接]" target="_blank">[相关文献或研究标题]</a></li>
+                </ul>
+            </div>
+        </section>
+    </article>
+</body>
+</html>

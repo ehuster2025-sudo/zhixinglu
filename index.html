@@ -2225,7 +2225,7 @@
                 </div>
             `;
             
-            // 如果有外部HTML文件，加载它
+            // 强制要求所有模块使用HTML格式
             if (item.contentFile) {
                 try {
                     const response = await fetch(item.contentFile);
@@ -2233,139 +2233,26 @@
                     html += `<div class="detail-section">${contentHtml}</div>`;
                 } catch (error) {
                     console.error('Failed to load content file:', error);
-                    html += `<div class="detail-section"><p>内容加载失败</p></div>`;
+                    html += `<div class="detail-section"><p style="color: var(--error); text-align: center; padding: 2rem;">内容加载失败，请检查HTML文件路径是否正确</p></div>`;
                 }
             } else {
-                // 使用原有的JSON字段渲染逻辑
+                // 提示需要创建HTML文件
+                const moduleName = isBook ? '书籍摘要' : (isShanhaijing ? '山海经' : '历史人物');
                 html += `
                 <div class="detail-section">
-                    <h2 class="detail-section-title">${isShanhaijing ? '基本信息' : '一句话概括'}</h2>
-                    <p>${item.summary}</p>
+                    <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1rem;">
+                            <strong>该${moduleName}条目尚未创建HTML内容</strong>
+                        </p>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                            请按照模板在 <code>./data/</code> 目录下创建对应的HTML文件，并在JSON中添加 <code>contentFile</code> 字段
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                            参考模板：<br>
+                            ${isBook ? 'books-template.html' : (isShanhaijing ? 'qiongqi.html' : 'history-template.html')}
+                        </p>
+                    </div>
                 </div>
-                `;
-            }
-            
-            if (item.authorBackground) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '原典记载' : (isBook ? '作者背景' : '出处背景')}</h2>
-                        <div class="detail-body">
-                            <p><strong>${item.authorBackground.name}</strong></p>
-                            <p>${item.authorBackground.desc}</p>
-                            ${item.authorBackground.motivation ? `
-                                <ul class="detail-points">
-                                    ${item.authorBackground.motivation.map(m => `
-                                        <li>
-                                            <div>
-                                                <div class="detail-point-content">${m}</div>
-                                            </div>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.keyPoints && item.keyPoints.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '形象描绘' : '核心观点'}</h2>
-                        <ul class="detail-points">
-                            ${item.keyPoints.map((point, i) => `
-                                <li>
-                                    <div>
-                                        <div class="detail-point-title">${point.title}</div>
-                                        <div class="detail-point-content">${point.content}</div>
-                                    </div>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            // 山海经专属七段式架构
-            if (isShanhaijing && item.sections && item.sections.length > 0) {
-                // 使用新的七段式结构
-                item.sections.forEach(section => {
-                    html += `
-                        <div class="detail-section">
-                            <h2 class="detail-section-title">${section.title}</h2>
-                            <div class="detail-chapters">
-                                ${section.content.map(item => `
-                                    <div class="detail-chapter">
-                                        ${item.title ? `<div class="detail-chapter-title">${item.title}</div>` : ''}
-                                        <div class="detail-chapter-content">${item.content}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                });
-            } else if (item.chapters && item.chapters.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '神异之处' : (isBook ? '章节梳理' : '内容梳理')}</h2>
-                        <div class="detail-chapters">
-                            ${item.chapters.map(chapter => `
-                                <div class="detail-chapter">
-                                    <div class="detail-chapter-title">${chapter.title}</div>
-                                    <div class="detail-chapter-content">${chapter.content}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.quotes && item.quotes.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '关联传说' : '金句摘录'}</h2>
-                        <div class="detail-quotes">
-                            ${item.quotes.map(quote => `
-                                <div class="detail-quote">
-                                    <div class="detail-quote-text">"${quote.text}"</div>
-                                    <div class="detail-quote-source">—— ${quote.source}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.guide && item.guide.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '文化流变' : '实践指南'}</h2>
-                        <div class="detail-guide">
-                            ${item.guide.map(g => `
-                                <div class="detail-guide-item">
-                                    <span class="detail-guide-check">✓</span>
-                                    <span>${g}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.extended && item.extended.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isShanhaijing ? '趣味解读' : '延伸阅读'}</h2>
-                        <div class="detail-extended">
-                            ${item.extended.map(ext => `
-                                <div class="detail-extended-card">
-                                    <div class="detail-extended-title">${ext.title}</div>
-                                    <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">${ext.author}</div>
-                                    <div class="detail-extended-desc">${ext.desc}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
                 `;
             }
             
