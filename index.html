@@ -1796,20 +1796,26 @@
                     saveDataToStorage();
                     renderGrid(importTargetModule, importTargetModule + 'Grid');
                     
+                    // 如果当前正在查看该模块，刷新视图
+                    if (currentModule === importTargetModule) {
+                        showModule(importTargetModule);
+                    }
+                    
                     if (resultEl) {
                         if (errorMessages.length > 0) {
                             resultEl.innerHTML = `成功导入 ${successCount} 条，但有 ${errorMessages.length} 项出错`;
                             resultEl.className = 'import-result error';
+                            resultEl.style.display = 'block';
                         } else {
                             resultEl.innerHTML = `成功导入 ${successCount} 条！`;
                             resultEl.className = 'import-result success';
-                            // 1.5秒后关闭弹窗
+                            resultEl.style.display = 'block';
+                            // 2秒后关闭弹窗
                             setTimeout(() => {
                                 closeImportModal();
                                 clearImportModal();
-                            }, 1500);
+                            }, 2000);
                         }
-                        resultEl.style.display = 'block';
                     }
                 } else {
                     if (resultEl) {
@@ -1882,6 +1888,11 @@
                 data[module].splice(index, 1);
                 saveDataToStorage();
                 renderGrid(module, module + 'Grid');
+                
+                // 如果当前正在查看该模块，刷新视图
+                if (currentModule === module) {
+                    showModule(module);
+                }
             }
             
             closeConfirmDialog();
