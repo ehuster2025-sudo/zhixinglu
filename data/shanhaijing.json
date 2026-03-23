@@ -103,6 +103,7 @@
                 "author": "司马迁",
                 "desc": "记载舜帝流放四凶的历史传说。"
             }
-        ]
+        ],
+        "coverImage": "./data/qiongqi-cover.jpg"
     }
 ]
