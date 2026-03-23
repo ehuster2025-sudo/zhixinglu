@@ -2166,6 +2166,7 @@
             document.getElementById('modalTitle').textContent = titles[module];
             
             const isBook = module === 'books';
+            const isShanhaijing = module === 'shanhaijing';
             const hasImage = item.coverImage && item.coverImage.startsWith('data:image');
             
             document.getElementById('modalBody').innerHTML = `
@@ -2200,6 +2201,7 @@
             if (!item) return;
             
             const isBook = currentModule === 'books';
+            const isShanhaijing = currentModule === 'shanhaijing';
             const hasDetailImage = item.coverImage && item.coverImage.startsWith('data:image');
             
             let html = `
@@ -2223,7 +2225,7 @@
                 </div>
                 
                 <div class="detail-section">
-                    <h2 class="detail-section-title">一句话概括</h2>
+                    <h2 class="detail-section-title">${isShanhaijing ? '基本信息' : '一句话概括'}</h2>
                     <p>${item.summary}</p>
                 </div>
             `;
@@ -2231,7 +2233,7 @@
             if (item.authorBackground) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">${isBook ? '作者背景' : '出处背景'}</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '原典记载' : (isBook ? '作者背景' : '出处背景')}</h2>
                         <div class="detail-body">
                             <p><strong>${item.authorBackground.name}</strong></p>
                             <p>${item.authorBackground.desc}</p>
@@ -2254,7 +2256,7 @@
             if (item.keyPoints && item.keyPoints.length > 0) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">核心观点</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '形象描绘' : '核心观点'}</h2>
                         <ul class="detail-points">
                             ${item.keyPoints.map((point, i) => `
                                 <li>
@@ -2272,7 +2274,7 @@
             if (item.chapters && item.chapters.length > 0) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">${isBook ? '章节梳理' : '内容梳理'}</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '神异之处' : (isBook ? '章节梳理' : '内容梳理')}</h2>
                         <div class="detail-chapters">
                             ${item.chapters.map(chapter => `
                                 <div class="detail-chapter">
@@ -2288,7 +2290,7 @@
             if (item.quotes && item.quotes.length > 0) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">金句摘录</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '关联传说' : '金句摘录'}</h2>
                         <div class="detail-quotes">
                             ${item.quotes.map(quote => `
                                 <div class="detail-quote">
@@ -2304,7 +2306,7 @@
             if (item.guide && item.guide.length > 0) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">实践指南</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '文化流变' : '实践指南'}</h2>
                         <div class="detail-guide">
                             ${item.guide.map(g => `
                                 <div class="detail-guide-item">
@@ -2320,7 +2322,7 @@
             if (item.extended && item.extended.length > 0) {
                 html += `
                     <div class="detail-section">
-                        <h2 class="detail-section-title">延伸阅读</h2>
+                        <h2 class="detail-section-title">${isShanhaijing ? '趣味解读' : '延伸阅读'}</h2>
                         <div class="detail-extended">
                             ${item.extended.map(ext => `
                                 <div class="detail-extended-card">
