@@ -1,2304 +1,936 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知行录 - 知行合一</title>
+    <title>我的书架 - 个人阅读记录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 系统字体栈，无需外部加载 */
-        @font-face {
-            font-family: 'System Serif';
-            src: local('PingFang SC'), local('Microsoft YaHei'), local('Noto Serif CJK SC'), local('Source Han Serif SC'), serif;
-        }
-        
         :root {
-            --bg-primary: #faf8f5;
-            --bg-secondary: #f5f2ed;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a5a;
-            --text-muted: #8a8a9a;
-            --accent-primary: #1a1a2e;
-            --accent-secondary: #8b7355;
-            --border: #e8e4df;
-            --shadow: 0 4px 12px -2px rgba(26, 26, 46, 0.08);
-            --shadow-lg: 0 12px 40px -8px rgba(26, 26, 46, 0.12);
-            --radius: 12px;
-            --radius-lg: 16px;
-            --success: #22c55e;
-            --error: #ef4444;
+            --wood-dark: #3d2914;
+            --wood-medium: #5c3d1e;
+            --wood-light: #8b5a2b;
+            --paper: #f5f0e6;
+            --paper-dark: #e8e0d0;
+            --accent: #c9a227;
+            --text: #2c2416;
+            --shadow: rgba(0,0,0,0.3);
         }
 
-        [data-theme="dark"] {
-            --bg-primary: #0f0f12;
-            --bg-secondary: #1a1a1f;
-            --bg-card: #1e1e24;
-            --text-primary: #f5f2ed;
-            --text-secondary: #b8b4ad;
-            --text-muted: #6a6a72;
-            --accent-primary: #c4a77d;
-            --accent-secondary: #8b7355;
-            --border: #2a2a32;
-            --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1f16 50%, #1a0f0a 100%);
             min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
         }
 
-        /* 导航栏 */
-        .navbar {
+        /* 背景纹理 */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            height: 72px;
-            background: rgba(250, 248, 245, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 48px;
-        }
-
-        [data-theme="dark"] .navbar {
-            background: rgba(15, 15, 18, 0.95);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            color: white;
-        }
-
-        .brand-text {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-link {
-            padding: 8px 16px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--accent-primary);
-            background: var(--bg-secondary);
-        }
-
-        .btn-icon {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn-icon:hover {
-            background: var(--bg-secondary);
-        }
-
-        /* 主内容 */
-        .main { padding-top: 72px; }
-
-        /* Hero */
-        .hero {
-            padding: 80px 48px 60px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-        }
-
-        .hero-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .search-box {
-            max-width: 500px;
-            margin: 0 auto 60px;
-            padding: 16px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 1rem;
             width: 100%;
-            box-shadow: var(--shadow);
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139,90,43,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201,162,39,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .search-box:focus {
-            outline: none;
-            border-color: var(--accent-secondary);
-        }
-
-        /* 模块卡片 */
-        .modules-section { padding: 0 48px 80px; }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .module-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .module-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-secondary);
-        }
-
-        .module-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .module-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .module-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        /* 导入功能样式 */
-        .import-section {
-            padding: 0 48px 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .import-image-section {
-            margin-bottom: 20px;
-        }
-
-        .import-image-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .import-image-input {
-            display: none;
-        }
-
-        .import-image-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: var(--bg-secondary);
-            border: 2px dashed var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-secondary);
-        }
-
-        .import-image-btn:hover {
-            border-color: var(--accent-secondary);
-            color: var(--accent-secondary);
-        }
-
-        .import-image-preview {
-            margin-top: 16px;
-            display: none;
-        }
-
-        .import-image-preview.active {
-            display: block;
-        }
-
-        .import-image-preview img {
-            max-width: 200px;
-            max-height: 280px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .import-image-info {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .import-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-        }
-
-        .import-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .import-desc {
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-            line-height: 1.7;
-        }
-
-        .import-textarea {
-            width: 100%;
-            min-height: 300px;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            resize: vertical;
-            margin-bottom: 16px;
-        }
-
-        .import-textarea:focus {
-            outline: none;
-            border-color: var(--accent-secondary);
-        }
-
-        .import-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .import-btn {
-            padding: 12px 24px;
-            background: var(--accent-primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .import-btn:hover {
-            background: var(--accent-secondary);
-        }
-
-        .import-btn-secondary {
-            padding: 12px 24px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .template-btn {
-            padding: 12px 24px;
-            background: transparent;
-            color: var(--accent-secondary);
-            border: 1px dashed var(--accent-secondary);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .template-btn:hover {
-            background: rgba(139, 115, 85, 0.1);
-        }
-
-        .import-result {
-            margin-top: 20px;
-            padding: 16px 20px;
-            border-radius: var(--radius);
-            display: none;
-        }
-
-        .import-result.success {
-            display: block;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-
-        .import-result.error {
-            display: block;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--error);
-            color: var(--error);
-        }
-
-        .imported-books-count {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            background: var(--accent-secondary);
-            color: white;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-left: 12px;
-        }
-
-        /* 内容区域 */
-        .content-section {
-            padding: 40px 48px;
-            display: none;
-        }
-
-        .content-section.active { display: block; }
-
-        .content-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .content-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 2rem;
-            font-weight: 600;
-        }
-
-        .filters {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .filter-chip {
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .filter-chip:hover, .filter-chip.active {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
-            color: white;
-        }
-
-        /* 卡片网格 */
-        .grid-view {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .content-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* 头部 */
+        header {
+            background: linear-gradient(180deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+            padding: 2rem;
+            box-shadow: 0 4px 20px var(--shadow);
             position: relative;
-        }
-
-        .content-card:hover .card-delete-btn {
-            opacity: 1;
-        }
-
-        .card-delete-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 32px;
-            height: 32px;
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: all 0.2s ease;
             z-index: 10;
         }
 
-        .card-delete-btn:hover {
-            background: rgba(239, 68, 68, 1);
-            transform: scale(1.1);
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
 
-        .content-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-secondary);
-        }
-
-        .card-image {
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            overflow: hidden;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            text-shadow: 2px 2px 4px var(--shadow);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--paper-dark);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 统计卡片 */
+        .stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--wood-light);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--paper-dark);
+            margin-top: 0.25rem;
+        }
+
+        /* 控制栏 */
+        .controls {
+            background: var(--wood-medium);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--wood-dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .controls-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
             position: relative;
         }
 
-        /* 书籍卡片背景 */
-        .card-image.books {
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%);
-        }
-
-        /* 历史人物卡片背景 */
-        .card-image.history {
-            background: linear-gradient(135deg, #2C3E50 0%, #4A6741 50%, #8B7355 100%);
-        }
-
-        /* 山海经卡片背景 */
-        .card-image.shanhaijing {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-
-        .card-image img {
+        .search-box input {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--wood-light);
+            border-radius: 8px;
+            background: var(--paper);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.3s ease;
         }
 
-        .card-image .fallback-icon {
-            font-size: 4rem;
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201,162,39,0.2);
+        }
+
+        .search-box::before {
+            content: '🔍';
             position: absolute;
+            left: 0.75rem;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.8;
+            transform: translateY(-50%);
+            opacity: 0.5;
         }
 
-        .card-body { padding: 20px; }
-
-        .card-tag {
-            display: inline-block;
-            padding: 4px 10px;
-            background: rgba(139, 115, 85, 0.1);
-            color: var(--accent-secondary);
-            font-size: 0.7rem;
-            font-weight: 600;
-            border-radius: 4px;
-            margin-bottom: 12px;
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
-        .card-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .card-subtitle {
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--wood-light);
+            background: transparent;
+            color: var(--paper);
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
+            transition: all 0.3s ease;
         }
 
-        .card-summary {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--wood-dark);
+        }
+
+        /* 书架区域 */
+        .bookshelf-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .shelf {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .shelf-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .shelf-board {
+            background: linear-gradient(180deg, var(--wood-medium) 0%, var(--wood-dark) 100%);
+            padding: 2rem 1.5rem 1rem;
+            border-radius: 4px 4px 8px 8px;
+            box-shadow: 
+                0 10px 30px var(--shadow),
+                inset 0 2px 0 rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .shelf-board::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(180deg, var(--wood-light) 0%, var(--wood-dark) 100%);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .books-row {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding-bottom: 1rem;
+        }
+
+        /* 书籍卡片 */
+        .book {
+            width: 140px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            transform-origin: bottom center;
+        }
+
+        .book:hover {
+            transform: translateY(-15px) scale(1.05);
+            z-index: 10;
+        }
+
+        .book-spine {
+            aspect-ratio: 2/3;
+            border-radius: 3px 6px 6px 3px;
+            box-shadow: 
+                -2px 0 5px rgba(0,0,0,0.3),
+                2px 2px 10px rgba(0,0,0,0.2);
+            position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem 0.5rem;
         }
 
-        /* 弹窗 */
-        .modal-overlay {
+        /* 不同颜色的书脊 */
+        .book-spine.red { background: linear-gradient(90deg, #8b2635 0%, #a52a2a 50%, #8b2635 100%); }
+        .book-spine.blue { background: linear-gradient(90deg, #1e3a5f 0%, #2e5090 50%, #1e3a5f 100%); }
+        .book-spine.green { background: linear-gradient(90deg, #1e4d2b 0%, #2d6a4f 50%, #1e4d2b 100%); }
+        .book-spine.brown { background: linear-gradient(90deg, #4a3728 0%, #6b4423 50%, #4a3728 100%); }
+        .book-spine.navy { background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%); }
+        .book-spine.orange { background: linear-gradient(90deg, #8b4513 0%, #cd853f 50%, #8b4513 100%); }
+        .book-spine.purple { background: linear-gradient(90deg, #4a1e4e 0%, #6b2d6c 50%, #4a1e4e 100%); }
+        .book-spine.teal { background: linear-gradient(90deg, #1e4e4e 0%, #2d6b6b 50%, #1e4e4e 100%); }
+
+        .book-spine::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+        }
+
+        .book-spine::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+        }
+
+        .book-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.95);
+            text-align: center;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            margin: 0 auto;
+        }
+
+        .book-author {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .book-rating {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--accent);
+        }
+
+        /* 书籍详情弹窗 */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 2rem;
         }
 
-        .modal-overlay.active { display: flex; }
+        .modal.active {
+            display: flex;
+        }
 
-        .modal {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
+        .modal-content {
+            background: var(--paper);
             max-width: 600px;
             width: 100%;
-            max-height: 85vh;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1.25rem;
+            background: linear-gradient(135deg, var(--wood-dark), var(--wood-medium));
+            padding: 1.5rem;
+            color: var(--paper);
         }
 
         .modal-body {
-            padding: 24px;
-            overflow-y: auto;
-            max-height: calc(85vh - 70px);
+            padding: 2rem;
         }
 
-        .preview-cover {
-            width: 120px;
-            height: 160px;
-            border-radius: var(--radius);
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            overflow: hidden;
-            box-shadow: var(--shadow);
+        .modal-book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
         }
 
-        .preview-cover.books {
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%);
-        }
-
-        .preview-cover.history {
-            background: linear-gradient(135deg, #2C3E50 0%, #4A6741 50%, #8B7355 100%);
-        }
-
-        .preview-cover.shanhaijing {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-
-        .preview-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preview-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .preview-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .preview-subtitle {
+        .modal-book-author {
             font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
+            opacity: 0.8;
         }
 
-        .preview-meta {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .preview-summary {
-            padding: 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .preview-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            padding: 12px 32px;
-            background: var(--accent-primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-secondary);
-        }
-
-        .btn-secondary {
-            padding: 12px 32px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* 详情页 */
-        .detail-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-primary);
-            z-index: 3000;
-            overflow-y: auto;
-        }
-
-        .detail-page.active { display: block; }
-
-        .detail-header-bar {
-            position: sticky;
-            top: 0;
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
-        }
-
-        .detail-back {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .detail-content-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 48px;
-        }
-
-        .detail-hero {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 48px;
-            padding-bottom: 48px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .detail-cover {
-            width: 200px;
-            height: 280px;
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            flex-shrink: 0;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .detail-cover.books {
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%);
-        }
-
-        .detail-cover.history {
-            background: linear-gradient(135deg, #2C3E50 0%, #4A6741 50%, #8B7355 100%);
-        }
-
-        .detail-cover.shanhaijing {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-
-        .detail-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .detail-hero-info {
-            flex: 1;
-        }
-
-        .detail-hero-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .detail-hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .detail-hero-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-
-        .detail-hero-meta span {
-            display: flex;
-            gap: 8px;
-        }
-
-        .detail-hero-meta strong {
-            color: var(--text-primary);
-            min-width: 80px;
-        }
-
-        .detail-section {
-            margin-bottom: 48px;
-        }
-
-        .detail-section-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .detail-body {
-            line-height: 1.9;
-            font-size: 1.05rem;
-        }
-
-        .detail-body p {
-            margin-bottom: 20px;
-        }
-
-        .detail-points {
-            list-style: none;
-            counter-reset: point;
-        }
-
-        .detail-points li {
-            counter-increment: point;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 16px;
-        }
-
-        .detail-points li::before {
-            content: counter(point);
-            width: 32px;
-            height: 32px;
-            background: var(--accent-secondary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .detail-point-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .detail-point-content {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .detail-chapters {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .detail-chapter {
-            padding: 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .detail-chapter-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--accent-secondary);
-        }
-
-        .detail-chapter-content {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .detail-quotes {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .detail-quote {
-            padding: 20px 24px;
-            background: var(--bg-secondary);
-            border-left: 4px solid var(--accent-secondary);
-            border-radius: 0 var(--radius) var(--radius) 0;
-            font-style: italic;
-        }
-
-        .detail-quote-text {
-            font-size: 1.05rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .detail-quote-source {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .detail-guide {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .detail-guide-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 0;
-        }
-
-        .detail-guide-check {
-            color: var(--accent-secondary);
-            font-weight: 600;
-        }
-
-        .detail-extended {
+        .book-meta {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--paper-dark);
+            border-radius: 8px;
         }
 
-        .detail-extended-card {
-            padding: 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .detail-extended-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .detail-extended-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* 模板弹窗 */
-        .template-modal {
-            max-width: 800px;
-        }
-
-        .template-content {
-            background: var(--bg-secondary);
-            padding: 20px;
-            border-radius: var(--radius);
-            font-family: 'SF Mono', 'Monaco', monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        /* 确认对话框 */
-        .confirm-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 4000;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-        }
-
-        .confirm-overlay.active { display: flex; }
-
-        .confirm-dialog {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            max-width: 400px;
-            width: 100%;
-            padding: 32px;
-            box-shadow: var(--shadow-lg);
+        .meta-item {
             text-align: center;
         }
 
-        .confirm-icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
+        .meta-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.25rem;
         }
 
-        .confirm-title {
-            font-family: 'PingFang SC', 'Microsoft YaHei', serif;
-            font-size: 1.25rem;
+        .meta-value {
             font-weight: 600;
-            margin-bottom: 12px;
+            color: var(--wood-dark);
         }
 
-        .confirm-message {
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-            line-height: 1.6;
+        .book-summary {
+            line-height: 1.8;
+            color: var(--text);
+            margin-top: 1rem;
         }
 
-        .confirm-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .confirm-btn-danger {
-            padding: 12px 24px;
-            background: var(--error);
-            color: white;
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
             border: none;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
+            color: var(--paper);
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
 
-        .confirm-btn-danger:hover {
-            background: #dc2626;
+        .modal-close:hover {
+            opacity: 1;
         }
 
-        .confirm-btn-secondary {
-            padding: 12px 24px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* 管理按钮 */
-        .manage-actions {
+        .tags {
             display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
         }
 
-        .manage-btn {
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--wood-light);
+            color: var(--paper);
+            border-radius: 15px;
+            font-size: 0.8rem;
         }
 
-        .manage-btn:hover {
-            background: var(--error);
-            border-color: var(--error);
-            color: white;
+        /* 页脚 */
+        footer {
+            background: var(--wood-dark);
+            padding: 2rem;
+            text-align: center;
+            color: var(--paper-dark);
+            border-top: 3px solid var(--accent);
         }
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .navbar { padding: 0 20px; }
-            .nav-links { display: none; }
-            .hero { padding: 60px 20px; }
-            .hero-title { font-size: 2rem; }
-            .modules-section, .content-section, .import-section { padding: 20px; }
-            .modules-grid { grid-template-columns: 1fr; }
-            .grid-view { grid-template-columns: 1fr; }
-            .detail-hero { flex-direction: column; align-items: center; }
-            .detail-cover { width: 150px; height: 210px; }
-            .detail-hero-title { font-size: 1.8rem; }
-            .detail-content-wrapper { padding: 24px; }
-            .import-actions { flex-direction: column; }
-            .import-btn, .import-btn-secondary, .template-btn { width: 100%; }
-            .card-delete-btn { opacity: 1; }
-            .confirm-actions { flex-direction: column; }
-            .confirm-btn-danger, .confirm-btn-secondary { width: 100%; }
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats {
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 0.75rem 1rem;
+            }
+
+            .book {
+                width: 100px;
+            }
+
+            .controls-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--paper-dark);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar" id="navbar">
-        <div class="brand" onclick="showHome()">
-            <div class="brand-icon">知</div>
-            <span class="brand-text">知行录</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="nav-link active" onclick="showHome()">首页</span>
-            <span class="nav-link" onclick="showModule('books')">书籍</span>
-            <span class="nav-link" onclick="showModule('history')">历史</span>
-            <span class="nav-link" onclick="showModule('shanhaijing')">山海经</span>
-        </div>
-
-        <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
-    </nav>
-
-    <!-- 主内容 -->
-    <main class="main">
-        <!-- 首页 -->
-        <section class="home-section" id="homeSection">
-            <div class="hero">
-                <div class="hero-badge">
-                    <span>✦</span>
-                    <span>知识汇聚 · 知行合一</span>
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>我的书架</h1>
+                <div class="subtitle">记录每一本读过的书，收藏每一个思想的火花</div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalBooks">0</div>
+                    <div class="stat-label">已读书籍</div>
                 </div>
-                <h1 class="hero-title">探索知识的边界</h1>
-                <p class="hero-subtitle">在这里，阅读不仅是记录，更是与古今智者对话的旅程</p>
-                <input type="text" class="search-box" placeholder="搜索书籍、人物、神兽..." id="searchInput">
-            </div>
-
-            <section class="modules-section">
-                <div class="modules-grid">
-                    <div class="module-card" onclick="showModule('books')">
-                        <div class="module-icon">📚</div>
-                        <h3 class="module-title">书籍摘要</h3>
-                        <p class="module-desc">记录每一本读过的书，收藏思想的火花</p>
-                    </div>
-
-                    <div class="module-card" onclick="showModule('history')">
-                        <div class="module-icon">🏛️</div>
-                        <h3 class="module-title">历史人物</h3>
-                        <p class="module-desc">以人为镜，可以明得失</p>
-                    </div>
-
-                    <div class="module-card" onclick="showModule('shanhaijing')">
-                        <div class="module-icon">🐉</div>
-                        <h3 class="module-title">山海经</h3>
-                        <p class="module-desc">探索上古神话，领略东方奇幻</p>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="thisYear">0</div>
+                    <div class="stat-label">今年阅读</div>
                 </div>
-            </section>
+                <div class="stat-item">
+                    <div class="stat-number" id="avgRating">0</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-        </section>
+    <div class="controls">
+        <div class="controls-content">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索书名、作者、标签...">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="文学">文学</button>
+                <button class="filter-btn" data-filter="历史">历史</button>
+                <button class="filter-btn" data-filter="哲学">哲学</button>
+                <button class="filter-btn" data-filter="科技">科技</button>
+                <button class="filter-btn" data-filter="商业">商业</button>
+            </div>
+        </div>
+    </div>
 
-        <!-- 书籍模块 -->
-        <section class="content-section" id="booksSection">
-            <div class="content-header">
-                <h2 class="content-title">书籍摘要</h2>
-            </div>
-            <div class="manage-actions">
-                <button class="manage-btn" onclick="showImportModal('books')">📥 导入书籍</button>
-                <button class="manage-btn" onclick="resetModule('books')">🗑️ 重置数据</button>
-            </div>
-            <div class="filters">
-                <span class="filter-chip active" onclick="filterItems('books', 'all')">全部</span>
-                <span class="filter-chip" onclick="filterItems('books', '文学')">文学</span>
-                <span class="filter-chip" onclick="filterItems('books', '历史')">历史</span>
-                <span class="filter-chip" onclick="filterItems('books', '科幻')">科幻</span>
-            </div>
-            <div class="grid-view" id="booksGrid"></div>
-        </section>
-
-        <!-- 历史模块 -->
-        <section class="content-section" id="historySection">
-            <div class="content-header">
-                <h2 class="content-title">历史人物</h2>
-            </div>
-            <div class="manage-actions">
-                <button class="manage-btn" onclick="showImportModal('history')">📥 导入人物</button>
-                <button class="manage-btn" onclick="resetModule('history')">🗑️ 重置数据</button>
-            </div>
-            <div class="filters">
-                <span class="filter-chip active" onclick="filterItems('history', 'all')">全部</span>
-                <span class="filter-chip" onclick="filterItems('history', '三国')">三国</span>
-                <span class="filter-chip" onclick="filterItems('history', '明朝')">明朝</span>
-                <span class="filter-chip" onclick="filterItems('history', '宋朝')">宋朝</span>
-            </div>
-            <div class="grid-view" id="historyGrid"></div>
-        </section>
-
-        <!-- 山海经模块 -->
-        <section class="content-section" id="shanhaijingSection">
-            <div class="content-header">
-                <h2 class="content-title">山海经</h2>
-            </div>
-            <div class="manage-actions">
-                <button class="manage-btn" onclick="showImportModal('shanhaijing')">📥 导入神兽</button>
-                <button class="manage-btn" onclick="resetModule('shanhaijing')">🗑️ 重置数据</button>
-            </div>
-            <div class="filters">
-                <span class="filter-chip active" onclick="filterItems('shanhaijing', 'all')">全部</span>
-                <span class="filter-chip" onclick="filterItems('shanhaijing', '异兽')">异兽</span>
-                <span class="filter-chip" onclick="filterItems('shanhaijing', '神鸟')">神鸟</span>
-                <span class="filter-chip" onclick="filterItems('shanhaijing', '神话')">神话</span>
-            </div>
-            <div class="grid-view" id="shanhaijingGrid"></div>
-        </section>
+    <main class="bookshelf-container" id="bookshelf">
+        <!-- 书架内容将由JavaScript动态生成 -->
     </main>
 
-    <!-- 预览弹窗 -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title" id="modalTitle">预览</span>
+    <!-- 书籍详情弹窗 -->
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <div class="modal-header" style="position: relative;">
                 <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
-    </div>
-
-    <!-- 导入弹窗 -->
-    <div class="modal-overlay" id="importModal" onclick="closeImportModal(event)">
-        <div class="modal template-modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title" id="importModalTitle">导入数据</span>
-                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+                <div class="modal-book-title" id="modalTitle">书名</div>
+                <div class="modal-book-author" id="modalAuthor">作者</div>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 16px; color: var(--text-secondary);">
-                    将生成的 JSON 数据粘贴到下方，点击"导入"即可添加。<br>
-                    支持在 JSON 中通过 coverImage 字段添加图片 URL 或 Base64 数据。
-                </p>
-                <textarea 
-                    class="import-textarea" 
-                    id="importTextarea" 
-                    placeholder="在此粘贴 JSON 数据..."
-                    style="min-height: 250px; margin-bottom: 16px;"
-                ></textarea>
-                <div class="import-result" id="importResult" style="margin-bottom: 16px;"></div>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <button class="btn-primary" onclick="executeImport()">📥 导入</button>
-                    <button class="btn-secondary" onclick="showTemplateForImport()">查看模板</button>
-                    <button class="btn-secondary" onclick="clearImportModal()">清空</button>
-                    <button class="btn-secondary" onclick="closeImportModal()">关闭</button>
+                <div class="book-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">阅读时间</div>
+                        <div class="meta-value" id="modalDate">2024</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">评分</div>
+                        <div class="meta-value" id="modalRating">★★★★★</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">分类</div>
+                        <div class="meta-value" id="modalCategory">文学</div>
+                    </div>
+                </div>
+                <div class="book-summary" id="modalSummary">
+                    书籍摘要内容...
+                </div>
+                <div class="tags" id="modalTags">
+                    <!-- 标签 -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 模板弹窗 -->
-    <div class="modal-overlay" id="templateModal" onclick="closeTemplateModal(event)">
-        <div class="modal template-modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">JSON 模板格式</span>
-                <button class="modal-close" onclick="closeTemplateModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: 16px; color: var(--text-secondary);">复制以下模板，修改内容后粘贴到导入框中：</p>
-                <pre class="template-content" id="templateContent"></pre>
-                <div style="margin-top: 20px; display: flex; gap: 12px;">
-                    <button class="btn-primary" onclick="copyTemplate()">复制模板</button>
-                    <button class="btn-secondary" onclick="closeTemplateModal()">关闭</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 详情页 -->
-    <div class="detail-page" id="detailPage">
-        <div class="detail-header-bar">
-            <button class="detail-back" onclick="closeDetailPage()">
-                <span>&larr;</span>
-                <span>返回</span>
-            </button>
-            <button class="btn-icon" onclick="toggleTheme()">🌙</button>
-        </div>
-        <div class="detail-content-wrapper" id="detailContent"></div>
-    </div>
-
-    <!-- 确认删除对话框 -->
-    <div class="confirm-overlay" id="confirmOverlay" onclick="closeConfirmDialog(event)">
-        <div class="confirm-dialog" onclick="event.stopPropagation()">
-            <div class="confirm-icon">⚠️</div>
-            <h3 class="confirm-title" id="confirmTitle">确认删除</h3>
-            <p class="confirm-message" id="confirmMessage">确定要删除吗？此操作不可恢复。</p>
-            <div class="confirm-actions">
-                <button class="confirm-btn-danger" id="confirmBtn" onclick="executeDelete()">删除</button>
-                <button class="confirm-btn-secondary" onclick="closeConfirmDialog()">取消</button>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <p>我的个人书架 &copy; 2025 | 用阅读丈量世界</p>
+    </footer>
 
     <script>
-        // 默认数据
-        const defaultData = {
-            books: [
-                {
-                    id: 1,
-                    title: "傲慢与偏见",
-                    subtitle: "简·奥斯汀 (Jane Austen)",
-                    englishTitle: "Pride and Prejudice",
-                    tag: "文学",
-                    year: "1813",
-                    category: "浪漫主义文学 / 英国经典 / 社会喜剧",
-                    date: "2024-01",
-                    icon: "📖",
-                    summary: "这是一个关于乡绅家二女儿伊丽莎白与富有贵族达西先生之间，因傲慢与偏见产生误解和纠葛，最终放下成见、消除误会，在相互理解与尊重的基础上收获真爱的爱情故事。",
-                    authorBackground: {
-                        name: "简·奥斯汀（Jane Austen，1775-1817）",
-                        desc: "18世纪末19世纪初英国著名女作家，出生于英国汉普郡一个牧师家庭。她终身未婚，一生大部分时间都在乡村度过，作品多以乡绅阶层的婚姻和爱情为题材。",
-                        motivation: [
-                            "社会观察：对当时英国乡绅阶层婚恋观的深刻洞察和批判",
-                            "女性视角：探讨女性在婚姻选择中的自主权和经济依赖困境",
-                            "道德教育：通过故事传达理性择偶、相互尊重的重要性",
-                            "文学追求：以幽默讽刺的笔调描绘人情世态，开创'家庭小说'传统"
-                        ]
-                    },
-                    keyPoints: [
-                        { title: "傲慢与偏见是爱情的最大障碍", content: "达西的傲慢让他显得冷漠疏离，伊丽莎白的偏见让她无法看清真相。小说揭示了主观成见如何阻碍人们认识彼此的真实面貌。" },
-                        { title: "真正的爱情建立在理解与尊重之上", content: "伊丽莎白和达西的爱情经历了从误解到理解、从偏见到尊重的转变。小说强调理想的婚姻应建立在相互了解、精神契合的基础上。" },
-                        { title: "批判以金钱和地位为核心的婚恋观", content: "通过夏洛特嫁给柯林斯等情节，小说讽刺了将婚姻视为经济交易的社会现象。" },
-                        { title: "第一印象往往不可靠", content: "伊丽莎白对达西的第一印象极差，但后来发现他品格高尚。小说提醒人们不要被表面现象迷惑。" },
-                        { title: "自我认知与成长的重要性", content: "伊丽莎白在得知真相后勇于承认自己的错误判断，达西也为了爱人改变傲慢态度。" }
-                    ],
-                    chapters: [
-                        { title: "第一部分：初识与误解（第 1-18 章）", content: "富有的单身汉宾利先生租下尼日斐庄园，并爱上了贝内特家的大女儿简。他的朋友达西先生在舞会上表现得高傲冷漠，拒绝与伊丽莎白跳舞，给她留下糟糕的第一印象。" },
-                        { title: "第二部分：偏见加深（第 19-30 章）", content: "柯林斯向伊丽莎白求婚被拒，转而娶了她的朋友夏洛特。伊丽莎白结识了英俊的军官威克姆，听信了他对达西的诽谤，对达西的偏见进一步加深。" },
-                        { title: "第三部分：求婚与决裂（第 31-42 章）", content: "达西向伊丽莎白求婚，但态度傲慢。伊丽莎白愤怒地拒绝了他。达西次日写信解释真相，伊丽莎白读信后开始反思自己的判断。" },
-                        { title: "第四部分：转折与救赎（第 43-52 章）", content: "伊丽莎白随舅父母游览达西的彭伯里庄园，偶遇提前归来的达西。达西变得谦逊有礼。此时传来消息：伊丽莎白的妹妹莉迪亚与威克姆私奔，达西暗中挽救了贝内特家的名誉。" },
-                        { title: "第五部分：圆满结局（第 53-61 章）", content: "宾利回到尼日斐并向简求婚成功。达西再次向伊丽莎白表达爱意，这次他态度谦卑真诚，伊丽莎白欣然接受。两对有情人终成眷属。" }
-                    ],
-                    quotes: [
-                        { text: "有钱的单身汉总要娶位太太，这是一条举世公认的真理。", source: "小说开篇名句" },
-                        { text: "傲慢让别人无法来爱我，偏见让我无法去爱别人。", source: "伊丽莎白对傲慢与偏见的反思" },
-                        { text: "要是他没有触犯我的骄傲，我也很容易原谅他的骄傲。", source: "伊丽莎白谈论达西的傲慢" },
-                        { text: "我已经被你迷住了，根本顾不上你的出身低微。", source: "达西向伊丽莎白表白" },
-                        { text: "只有真挚的爱情才能让我结婚。", source: "伊丽莎白坚持爱情至上的婚姻观" }
-                    ],
-                    guide: [
-                        "警惕第一印象的误导：不要轻易根据初次见面就对人下判断",
-                        "反思自己的傲慢与偏见：当对某人产生负面看法时，先问自己是否带有成见",
-                        "勇于承认错误：当发现自己判断失误时，要有勇气承认并修正",
-                        "为爱的人做出改变：真正的爱会让人变得更好",
-                        "坚持爱情至上的择偶观：优先考虑感情和精神契合",
-                        "保持独立的人格：不因外界压力而妥协自己的原则"
-                    ],
-                    extended: [
-                        { title: "《理智与情感》", author: "简·奥斯汀", desc: "奥斯汀的另一部代表作，讲述一对性格迥异的姐妹在爱情中的不同经历。" },
-                        { title: "《爱玛》", author: "简·奥斯汀", desc: "奥斯汀晚期作品，讲述一位富家小姐热心为他人做媒却屡次出错的故事。" },
-                        { title: "《简·爱》", author: "夏洛蒂·勃朗特", desc: "同为英国女作家经典作品，讲述一位孤女追求平等爱情的故事。" }
-                    ]
-                }
-            ],
-            history: [
-                {
-                    id: 1,
-                    title: "诸葛亮",
-                    subtitle: "三国时期蜀汉丞相",
-                    tag: "三国",
-                    date: "2024-03",
-                    icon: "🎋",
-                    summary: "鞠躬尽瘁，死而后已。智慧与忠诚的化身，三国时期杰出的政治家、军事家。",
-                    authorBackground: {
-                        name: "诸葛亮（181年－234年）",
-                        desc: "字孔明，号卧龙，琅琊阳都人。三国时期蜀汉丞相，杰出的政治家、军事家、文学家、书法家、发明家。",
-                        motivation: ["辅佐刘备建立蜀汉政权", "推行法治，赏罚分明", "发明木牛流马、改进连弩", "六出祁山，北伐中原"]
-                    },
-                    keyPoints: [
-                        { title: "隆中对的战略远见", content: "为刘备规划占据荆益、联吴抗曹、三分天下的战略蓝图，展现了卓越的政治远见。" },
-                        { title: "治国理政的才能", content: "治理蜀汉期间，赏罚分明，推行屯田，发展生产，使弱小的蜀汉得以在魏吴之间存续数十年。" },
-                        { title: "鞠躬尽瘁的精神", content: "刘备去世后，辅佐刘禅，尽心尽力，直至病逝于五丈原，真正做到了'鞠躬尽瘁，死而后已'。" },
-                        { title: "卓越的军事才能", content: "虽不以武力见长，但善于用兵，运筹帷幄，决胜千里。" },
-                        { title: "科技发明的贡献", content: "发明木牛流马解决蜀道运粮难题，改进连弩增强军队战斗力。" }
-                    ],
-                    chapters: [
-                        { title: "早年隐居：躬耕陇亩，待时而动", content: "诸葛亮早年隐居隆中，躬耕陇亩，好为《梁父吟》，自比管仲、乐毅。" },
-                        { title: "三顾茅庐：君臣际遇，隆中对策", content: "刘备三顾茅庐，诸葛亮感其诚意，提出著名的隆中对，为刘备规划了占据荆益、联吴抗曹的战略蓝图。" },
-                        { title: "赤壁之战：联吴抗曹，火烧赤壁", content: "诸葛亮出使东吴，舌战群儒，促成孙刘联盟。赤壁之战中，联军火烧赤壁，大败曹操。" },
-                        { title: "治理蜀汉：依法治国，发展生产", content: "刘备去世后，诸葛亮受托孤之重，辅佐后主刘禅。他推行法治，赏罚分明，发展生产。" },
-                        { title: "六出祁山：北伐中原，鞠躬尽瘁", content: "为实现刘备遗志，诸葛亮六出祁山北伐曹魏。234年，诸葛亮病逝于五丈原，享年54岁。" }
-                    ],
-                    quotes: [
-                        { text: "鞠躬尽瘁，死而后已。", source: "《出师表》" },
-                        { text: "非淡泊无以明志，非宁静无以致远。", source: "《诫子书》" },
-                        { text: "亲贤臣，远小人，此先汉所以兴隆也。", source: "《出师表》" },
-                        { text: "臣本布衣，躬耕于南阳。", source: "《出师表》" },
-                        { text: "受任于败军之际，奉命于危难之间。", source: "《出师表》" }
-                    ],
-                    guide: [
-                        "要有远大的战略眼光，善于规划未来",
-                        "治理国家要赏罚分明，依法治国",
-                        "对事业要尽心竭力，鞠躬尽瘁",
-                        "面对困难要保持冷静，运筹帷幄",
-                        "要不断学习，充实自己"
-                    ],
-                    extended: [
-                        { title: "《三国志》", author: "陈寿", desc: "记载三国历史的正史，对诸葛亮有详细记载。" },
-                        { title: "《三国演义》", author: "罗贯中", desc: "以三国历史为题材的小说，诸葛亮是其中的核心人物。" },
-                        { title: "《出师表》", author: "诸葛亮", desc: "诸葛亮北伐前上呈后主的表文，是中国文学史上的经典之作。" }
-                    ]
-                }
-            ],
-            shanhaijing: [
-                {
-                    id: 1,
-                    title: "九尾狐",
-                    subtitle: "青丘之山有兽，其状如狐而九尾",
-                    tag: "异兽",
-                    date: "2024-06",
-                    icon: "🦊",
-                    summary: "《山海经》中记载的神秘异兽，形似狐狸而生有九尾，叫声如婴儿啼哭。早期被视为祥瑞之兽，后世逐渐演变为狐妖形象。",
-                    authorBackground: {
-                        name: "《山海经·南山经》",
-                        desc: "《山海经》是中国先秦时期的一部古籍，作者不详。全书共十八卷，内容涵盖地理、神话、民俗等诸多领域。",
-                        motivation: ["记录上古地理知识", "保存神话传说", "反映先民想象", "文化传承"]
-                    },
-                    keyPoints: [
-                        { title: "外形特征：九尾之狐，声若婴儿", content: "《山海经》记载：'其状如狐而九尾，其音如婴儿，能食人，食者不蛊。'" },
-                        { title: "祥瑞象征：子孙昌盛，王者之兴", content: "在汉代以前，九尾狐被视为祥瑞之兽。《吴越春秋》记载大禹遇见九尾白狐，认为这是王者兴起的征兆。" },
-                        { title: "文化演变：从祥瑞到妖邪", content: "汉代以后，九尾狐的形象逐渐发生转变。在《封神演义》中，九尾狐妲己被描绘成祸国殃民的妖女。" },
-                        { title: "文学影响：中国神话的永恒主题", content: "九尾狐成为中国文学中最具代表性的神话形象之一，从《山海经》到现代影视作品不断被重新诠释。" },
-                        { title: "跨文化传播：东亚神话的共同记忆", content: "九尾狐的形象不仅在中国流传，还传播到日本、韩国等东亚国家，成为当地神话文化的重要组成部分。" }
-                    ],
-                    chapters: [
-                        { title: "《山海经》原文记载", content: "《山海经·南山经》记载：'青丘之山，有兽焉，其状如狐而九尾，其音如婴儿，能食人，食者不蛊。'" },
-                        { title: "大禹与九尾狐的传说", content: "《吴越春秋》记载：大禹来到涂山，遇见九尾白狐，认为这是王者兴起的征兆，于是娶涂山氏之女。" },
-                        { title: "汉代：祥瑞之兽的巅峰", content: "在汉代，九尾狐被视为重要的祥瑞之兽，与凤凰、麒麟并列。汉代的画像石、壁画中经常出现九尾狐的形象。" },
-                        { title: "唐宋：狐仙文化的兴起", content: "唐宋时期，随着志怪小说的发展，九尾狐的形象开始向狐仙、狐妖转变。" },
-                        { title: "明清：妲己与妖狐的定型", content: "明代《封神演义》中，九尾狐妲己成为祸国殃民的妖女典型。清代《聊斋志异》中的狐仙故事则更加多元化。" }
-                    ],
-                    quotes: [
-                        { text: "青丘之山，有兽焉，其状如狐而九尾。", source: "《山海经·南山经》" },
-                        { text: "绥绥白狐，九尾庞庞。成子家室，我都攸昌。", source: "《吴越春秋》" },
-                        { text: "狐九尾，何？狐死首丘，不忘本也。", source: "《白虎通义》" },
-                        { text: "妲己者，殷纣之妃也，宠嬖于纣。", source: "《列女传》" },
-                        { text: "食者不蛊，可以御兵。", source: "《山海经》" }
-                    ],
-                    guide: [
-                        "了解《山海经》的基本内容",
-                        "认识九尾狐从祥瑞到妖邪的文化演变",
-                        "探索中国古代神话体系",
-                        "比较中日韩三国对九尾狐的不同诠释",
-                        "理解神话形象的文化建构"
-                    ],
-                    extended: [
-                        { title: "《山海经》", author: "佚名", desc: "中国古代地理著作，是九尾狐神话的源头。" },
-                        { title: "《封神演义》", author: "许仲琳", desc: "明代神魔小说，九尾狐妲己是其中的重要角色。" },
-                        { title: "《聊斋志异》", author: "蒲松龄", desc: "清代文言短篇小说集，其中有许多关于狐仙的故事。" }
-                    ]
-                }
-            ]
-        };
-
-        // 从 localStorage 加载数据
-        let data = loadDataFromStorage();
-        let currentModule = null;
-        let currentItemId = null;
-
-        // 从 localStorage 加载数据
-        function loadDataFromStorage() {
-            const stored = localStorage.getItem('zhixinglu_data');
-            if (stored) {
-                try {
-                    return JSON.parse(stored);
-                } catch (e) {
-                    console.error('Failed to parse stored data:', e);
-                }
+        // 书籍数据
+        const booksData = [
+            {
+                id: 1,
+                title: "百年孤独",
+                author: "加西亚·马尔克斯",
+                category: "文学",
+                rating: 5,
+                date: "2024-01",
+                color: "green",
+                summary: "魔幻现实主义的巅峰之作，讲述了布恩迪亚家族七代人的传奇故事。书中融合了神话、传说与现实，展现了拉丁美洲百年来的历史变迁。孤独是全书的核心主题，每个人都在自己的孤独中挣扎。",
+                tags: ["诺贝尔奖", "魔幻现实主义", "经典"]
+            },
+            {
+                id: 2,
+                title: "人类简史",
+                author: "尤瓦尔·赫拉利",
+                category: "历史",
+                rating: 5,
+                date: "2024-02",
+                color: "brown",
+                summary: "从认知革命到科学革命，作者以宏大的视角梳理了人类发展的关键节点。书中提出的'虚构故事'概念令人深思，解释了人类如何通过共同的想象建立起复杂的社会结构。",
+                tags: ["大历史", "人类学", "畅销书"]
+            },
+            {
+                id: 3,
+                title: "三体",
+                author: "刘慈欣",
+                category: "科技",
+                rating: 5,
+                date: "2024-03",
+                color: "navy",
+                summary: "中国科幻文学的里程碑作品。从文革时期到宇宙末日，小说构建了一个宏大的宇宙图景。黑暗森林法则、降维打击等概念令人震撼，让人重新思考人类文明在宇宙中的位置。",
+                tags: ["科幻", "雨果奖", "硬科幻"]
+            },
+            {
+                id: 4,
+                title: "活着",
+                author: "余华",
+                category: "文学",
+                rating: 5,
+                date: "2024-01",
+                color: "red",
+                summary: "一个人一生的苦难史，却写出了生命的韧性。福贵经历了家道中落、战争、饥荒、亲人离世，却依然坚强地活着。余华用朴实的语言，讲述了一个人如何在苦难中寻找生存的意义。",
+                tags: ["当代文学", "苦难", "生命"]
+            },
+            {
+                id: 5,
+                title: "苏菲的世界",
+                author: "乔斯坦·贾德",
+                category: "哲学",
+                rating: 4,
+                date: "2024-04",
+                color: "blue",
+                summary: "一部以小说形式呈现的哲学史。通过苏菲收到神秘信件的故事，带领读者从古希腊哲学一路走到现代存在主义。是了解西方哲学的绝佳入门读物。",
+                tags: ["哲学入门", "西方哲学", "小说"]
+            },
+            {
+                id: 6,
+                title: "穷查理宝典",
+                author: "查理·芒格",
+                category: "商业",
+                rating: 5,
+                date: "2024-05",
+                color: "orange",
+                summary: "巴菲特搭档查理·芒格的智慧箴言录。书中阐述了多元思维模型的重要性，以及如何在投资和生活中运用跨学科知识。逆向思维、能力圈等概念对决策非常有启发。",
+                tags: ["投资", "思维模型", "智慧"]
+            },
+            {
+                id: 7,
+                title: "1984",
+                author: "乔治·奥威尔",
+                category: "文学",
+                rating: 5,
+                date: "2024-02",
+                color: "navy",
+                summary: "反乌托邦文学的经典之作。大洋国的极权统治、老大哥的监视、真理部的谎言，构成了一幅令人窒息的政治图景。'战争即和平，自由即奴役，无知即力量'的标语令人深思。",
+                tags: ["反乌托邦", "政治", "经典"]
+            },
+            {
+                id: 8,
+                title: "深度工作",
+                author: "卡尔·纽波特",
+                category: "商业",
+                rating: 4,
+                date: "2024-06",
+                color: "teal",
+                summary: "在碎片化的时代，深度工作的能力越来越稀缺。作者提出了培养深度工作能力的具体方法，包括工作仪式化、拥抱无聊、远离社交媒体等，对提升工作效率很有帮助。",
+                tags: ["效率", "专注力", "自我提升"]
+            },
+            {
+                id: 9,
+                title: "明朝那些事儿",
+                author: "当年明月",
+                category: "历史",
+                rating: 5,
+                date: "2024-03",
+                color: "red",
+                summary: "用现代语言讲述明朝三百年历史。作者以幽默风趣的笔调，将枯燥的历史变得生动有趣。从朱元璋到崇祯，每个皇帝、每个重要人物都被刻画得栩栩如生。",
+                tags: ["明史", "通俗历史", "畅销书"]
+            },
+            {
+                id: 10,
+                title: "沉默的大多数",
+                author: "王小波",
+                category: "文学",
+                rating: 5,
+                date: "2024-04",
+                color: "purple",
+                summary: "王小波的杂文代表作。他以独特的黑色幽默和理性精神，对当时的社会现象进行深刻批判。提倡独立思考，反对盲从，至今仍具有强烈的现实意义。",
+                tags: ["杂文", "思想", "批判"]
+            },
+            {
+                id: 11,
+                title: "黑客与画家",
+                author: "保罗·格雷厄姆",
+                category: "科技",
+                rating: 4,
+                date: "2024-05",
+                color: "orange",
+                summary: "硅谷创业教父的文集。书中探讨了黑客精神、创业、编程语言设计等话题。作者将黑客比作画家，强调编程也是一种创造性活动，对技术人员很有启发。",
+                tags: ["编程", "创业", "黑客文化"]
+            },
+            {
+                id: 12,
+                title: "被讨厌的勇气",
+                author: "岸见一郎",
+                category: "哲学",
+                rating: 4,
+                date: "2024-06",
+                color: "blue",
+                summary: "以对话形式介绍阿德勒心理学。书中提出了'课题分离'的概念，鼓励人们拥有被讨厌的勇气，不活在别人的期待中。对改善人际关系和自我接纳很有帮助。",
+                tags: ["心理学", "阿德勒", "自我成长"]
+            },
+            {
+                id: 13,
+                title: "置身事内",
+                author: "兰小欢",
+                category: "商业",
+                rating: 5,
+                date: "2024-07",
+                color: "brown",
+                summary: "复旦大学教授解读中国政府与经济发展。用通俗易懂的语言，解释了土地财政、招商引资、债务问题等经济现象，帮助读者理解中国经济的运行逻辑。",
+                tags: ["中国经济", "政府", "通俗经济学"]
+            },
+            {
+                id: 14,
+                title: "月亮与六便士",
+                author: "毛姆",
+                category: "文学",
+                rating: 4,
+                date: "2024-07",
+                color: "green",
+                summary: "以画家高更为原型创作的小说。主人公斯特里克兰德放弃了优渥的生活，追求绘画艺术。书中探讨了理想与现实的冲突，艺术与生活之间的矛盾。",
+                tags: ["艺术", "理想", "经典"]
+            },
+            {
+                id: 15,
+                title: "枪炮、病菌与钢铁",
+                author: "贾雷德·戴蒙德",
+                category: "历史",
+                rating: 5,
+                date: "2024-08",
+                color: "brown",
+                summary: "探讨人类社会发展不平衡的终极原因。作者从地理环境、农业起源、技术传播等角度，解释了为什么是欧亚文明征服了其他大陆，而非相反。",
+                tags: ["人类学", "地理决定论", "普利策奖"]
             }
-            return JSON.parse(JSON.stringify(defaultData));
+        ];
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        // 初始化统计
+        function updateStats() {
+            const total = booksData.length;
+            const thisYear = booksData.filter(b => b.date.startsWith('2024')).length;
+            const avgRating = (booksData.reduce((sum, b) => sum + b.rating, 0) / total).toFixed(1);
+
+            document.getElementById('totalBooks').textContent = total;
+            document.getElementById('thisYear').textContent = thisYear;
+            document.getElementById('avgRating').textContent = avgRating;
         }
 
-        // 保存数据到 localStorage
-        function saveDataToStorage() {
-            localStorage.setItem('zhixinglu_data', JSON.stringify(data));
-            updateImportedCount();
-        }
-
-        // 更新导入数量显示
-        function updateImportedCount() {
-            const importedCount = data.books.length - defaultData.books.length;
-            const countEl = document.getElementById('importedCount');
-            const countNumEl = document.getElementById('importedCountNum');
-            if (importedCount > 0) {
-                countEl.style.display = 'inline-flex';
-                countNumEl.textContent = importedCount;
-            } else {
-                countEl.style.display = 'none';
-            }
-        }
-
-        // 初始化
-        function init() {
-            renderAll();
-            updateImportedCount();
-        }
-
-        // 渲染所有
-        function renderAll() {
-            renderGrid('books', 'booksGrid');
-            renderGrid('history', 'historyGrid');
-            renderGrid('shanhaijing', 'shanhaijingGrid');
-        }
-
-        // 当前导入目标模块
-        let importTargetModule = null;
-
-        // 显示导入弹窗
-        function showImportModal(module) {
-            importTargetModule = module;
-            const moduleNames = { books: '书籍', history: '历史人物', shanhaijing: '山海经神兽' };
-            document.getElementById('importModalTitle').textContent = `导入${moduleNames[module]}`;
-            document.getElementById('importModal').classList.add('active');
-        }
-
-        // 关闭导入弹窗
-        function closeImportModal(e) {
-            if (!e || e.target.id === 'importModal') {
-                document.getElementById('importModal').classList.remove('active');
-                importTargetModule = null;
-            }
-        }
-
-        // 清空导入弹窗
-        function clearImportModal() {
-            const textarea = document.getElementById('importTextarea');
-            const resultEl = document.getElementById('importResult');
-            if (textarea) textarea.value = '';
-            if (resultEl) {
-                resultEl.className = 'import-result';
-                resultEl.style.display = 'none';
-                resultEl.innerHTML = '';
-            }
-        }
-
-        // 显示模板（从导入弹窗）
-        function showTemplateForImport() {
-            const templates = {
-                books: {
-                    title: "书名（必填）",
-                    subtitle: "作者（必填）",
-                    englishTitle: "英文书名",
-                    tag: "文学",
-                    year: "1813",
-                    category: "浪漫主义文学",
-                    icon: "📖",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/book-cover.jpg",
-                    authorBackground: { name: "作者名", desc: "作者简介", motivation: ["创作动机1"] },
-                    keyPoints: [{ title: "核心观点1", content: "详细内容" }],
-                    chapters: [{ title: "章节1", content: "内容" }],
-                    quotes: [{ text: "金句", source: "出处" }],
-                    guide: ["实践建议1"],
-                    extended: [{ title: "延伸书名", author: "作者", desc: "简介" }]
-                },
-                history: {
-                    title: "人物名（必填）",
-                    subtitle: "人物身份/称号",
-                    tag: "三国",
-                    date: "2024-03",
-                    icon: "🎋",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/portrait.jpg",
-                    authorBackground: { name: "生卒年", desc: "人物简介", motivation: ["历史贡献1"] },
-                    keyPoints: [{ title: "主要成就1", content: "详细内容" }],
-                    chapters: [{ title: "生平阶段1", content: "内容" }],
-                    quotes: [{ text: "名言", source: "出处" }],
-                    guide: ["学习要点1"],
-                    extended: [{ title: "相关书籍", author: "作者", desc: "简介" }]
-                },
-                shanhaijing: {
-                    title: "神兽名（必填）",
-                    subtitle: "出处描述",
-                    tag: "异兽",
-                    date: "2024-06",
-                    icon: "🦊",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/creature.jpg",
-                    authorBackground: { name: "《山海经·XX经》", desc: "古籍简介", motivation: ["文化意义1"] },
-                    keyPoints: [{ title: "特征1", content: "详细描述" }],
-                    chapters: [{ title: "传说1", content: "内容" }],
-                    quotes: [{ text: "原文", source: "出处" }],
-                    guide: [ "了解要点1"],
-                    extended: [{ title: "相关研究", author: "学者", desc: "简介" }]
+        // 按分类分组书籍
+        function groupBooksByCategory(books) {
+            const groups = {};
+            books.forEach(book => {
+                if (!groups[book.category]) {
+                    groups[book.category] = [];
                 }
-            };
+                groups[book.category].push(book);
+            });
+            return groups;
+        }
+
+        // 渲染书架
+        function renderBookshelf() {
+            const container = document.getElementById('bookshelf');
+            container.innerHTML = '';
+
+            // 过滤书籍
+            let filteredBooks = booksData;
             
-            document.getElementById('templateContent').textContent = JSON.stringify(templates[importTargetModule], null, 2);
-            document.getElementById('templateModal').classList.add('active');
-        }
+            if (currentFilter !== 'all') {
+                filteredBooks = filteredBooks.filter(b => b.category === currentFilter);
+            }
+            
+            if (searchTerm) {
+                filteredBooks = filteredBooks.filter(b => 
+                    b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    b.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    b.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()))
+                );
+            }
 
-        // 执行导入
-        function executeImport() {
-            if (!importTargetModule) return;
-            
-            const textarea = document.getElementById('importTextarea');
-            const resultEl = document.getElementById('importResult');
-            const jsonStr = textarea.value.trim();
-            
-            if (!jsonStr) {
-                if (resultEl) {
-                    resultEl.innerHTML = '请输入 JSON 数据';
-                    resultEl.className = 'import-result error';
-                    resultEl.style.display = 'block';
-                }
+            if (filteredBooks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <p>没有找到匹配的书籍</p>
+                    </div>
+                `;
                 return;
             }
-            
-            try {
-                let imported = JSON.parse(jsonStr);
+
+            // 按分类分组
+            const grouped = groupBooksByCategory(filteredBooks);
+
+            // 渲染每个分类
+            Object.entries(grouped).forEach(([category, books]) => {
+                const shelf = document.createElement('div');
+                shelf.className = 'shelf';
                 
-                // 支持单条或数组
-                if (!Array.isArray(imported)) {
-                    imported = [imported];
-                }
+                const title = document.createElement('div');
+                title.className = 'shelf-title';
+                title.textContent = category + ' (' + books.length + '本)';
                 
-                let successCount = 0;
-                let errorMessages = [];
+                const board = document.createElement('div');
+                board.className = 'shelf-board';
                 
-                imported.forEach((item, index) => {
-                    // 验证必需字段
-                    if (!item.title) {
-                        errorMessages.push(`第 ${index + 1} 项: 缺少 title 字段`);
-                        return;
-                    }
-                    if (!item.subtitle) {
-                        errorMessages.push(`第 ${index + 1} 项: 缺少 subtitle 字段`);
-                        return;
-                    }
-                    if (!item.summary) {
-                        errorMessages.push(`第 ${index + 1} 项: 缺少 summary 字段`);
-                        return;
-                    }
-                    
-                    // 设置默认值
-                    const newItem = {
-                        id: Date.now() + index,
-                        title: item.title,
-                        subtitle: item.subtitle,
-                        tag: item.tag || '未分类',
-                        date: new Date().toISOString().slice(0, 7),
-                        icon: item.icon || (importTargetModule === 'books' ? '📖' : importTargetModule === 'history' ? '🎋' : '🐉'),
-                        summary: item.summary,
-                        coverImage: item.coverImage || null,
-                        authorBackground: item.authorBackground || { name: item.subtitle, desc: '', motivation: [] },
-                        keyPoints: item.keyPoints || [],
-                        chapters: item.chapters || [],
-                        quotes: item.quotes || [],
-                        guide: item.guide || [],
-                        extended: item.extended || []
-                    };
-                    
-                    // 书籍特有字段
-                    if (importTargetModule === 'books') {
-                        newItem.englishTitle = item.englishTitle || '';
-                        newItem.year = item.year || new Date().getFullYear().toString();
-                        newItem.category = item.category || '其他';
-                    }
-                    
-                    data[importTargetModule].push(newItem);
-                    successCount++;
+                const row = document.createElement('div');
+                row.className = 'books-row';
+                
+                books.forEach(book => {
+                    const bookEl = createBookElement(book);
+                    row.appendChild(bookEl);
                 });
                 
-                if (successCount > 0) {
-                    saveDataToStorage();
-                    renderGrid(importTargetModule, importTargetModule + 'Grid');
-                    
-                    if (resultEl) {
-                        if (errorMessages.length > 0) {
-                            resultEl.innerHTML = `成功导入 ${successCount} 条，但有 ${errorMessages.length} 项出错`;
-                            resultEl.className = 'import-result error';
-                        } else {
-                            resultEl.innerHTML = `成功导入 ${successCount} 条！`;
-                            resultEl.className = 'import-result success';
-                            // 1.5秒后关闭弹窗
-                            setTimeout(() => {
-                                closeImportModal();
-                                clearImportModal();
-                            }, 1500);
-                        }
-                        resultEl.style.display = 'block';
-                    }
-                } else {
-                    if (resultEl) {
-                        resultEl.innerHTML = `导入失败:<br>${errorMessages.join('<br>')}`;
-                        resultEl.className = 'import-result error';
-                        resultEl.style.display = 'block';
-                    }
-                }
-                
-            } catch (e) {
-                if (resultEl) {
-                    resultEl.innerHTML = 'JSON 格式错误: ' + e.message;
-                    resultEl.className = 'import-result error';
-                    resultEl.style.display = 'block';
-                }
-            }
-        }
-
-        // 渲染网格
-        function renderGrid(module, containerId) {
-            const container = document.getElementById(containerId);
-            const items = data[module];
-            
-            container.innerHTML = items.map(item => {
-                const hasImage = item.coverImage && (item.coverImage.startsWith('data:image') || item.coverImage.startsWith('http'));
-                return `
-                <div class="content-card">
-                    <button class="card-delete-btn" onclick="event.stopPropagation(); confirmDelete('${module}', ${item.id}, '${item.title}')" title="删除">×</button>
-                    <div onclick="openPreview('${module}', ${item.id})">
-                        <div class="card-image ${module}" style="${hasImage ? `background-image: url('${item.coverImage}'); background-size: cover; background-position: center;` : ''}">
-                            ${!hasImage ? `<span class="fallback-icon">${item.icon}</span>` : ''}
-                        </div>
-                        <div class="card-body">
-                            <span class="card-tag">${item.tag}</span>
-                            <h3 class="card-title">${item.title}</h3>
-                            <p class="card-subtitle">${item.subtitle}</p>
-                            <p class="card-summary">${item.summary}</p>
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        // 删除相关变量
-        let deleteTarget = { module: null, id: null, title: '' };
-
-        // 确认删除
-        function confirmDelete(module, id, title) {
-            deleteTarget = { module, id, title };
-            document.getElementById('confirmTitle').textContent = '确认删除';
-            document.getElementById('confirmMessage').textContent = `确定要删除「${title}」吗？此操作不可恢复。`;
-            document.getElementById('confirmBtn').textContent = '删除';
-            document.getElementById('confirmBtn').onclick = executeDelete;
-            document.getElementById('confirmOverlay').classList.add('active');
-        }
-
-        // 执行删除
-        function executeDelete() {
-            if (!deleteTarget.module || !deleteTarget.id) return;
-            
-            const { module, id } = deleteTarget;
-            const index = data[module].findIndex(i => i.id === id);
-            
-            if (index > -1) {
-                data[module].splice(index, 1);
-                saveDataToStorage();
-                renderGrid(module, module + 'Grid');
-            }
-            
-            closeConfirmDialog();
-            deleteTarget = { module: null, id: null, title: '' };
-        }
-
-        // 重置模块数据
-        function resetModule(module) {
-            const moduleNames = { books: '书籍', history: '历史人物', shanhaijing: '山海经' };
-            deleteTarget = { module, reset: true };
-            document.getElementById('confirmTitle').textContent = '确认重置';
-            document.getElementById('confirmMessage').textContent = `确定要重置所有${moduleNames[module]}数据吗？这将恢复到初始状态，自定义添加的内容将被删除。`;
-            document.getElementById('confirmBtn').textContent = '重置';
-            document.getElementById('confirmBtn').onclick = executeReset;
-            document.getElementById('confirmOverlay').classList.add('active');
-        }
-
-        // 执行重置
-        function executeReset() {
-            if (!deleteTarget.module || !deleteTarget.reset) return;
-            
-            const { module } = deleteTarget;
-            data[module] = JSON.parse(JSON.stringify(defaultData[module]));
-            saveDataToStorage();
-            renderGrid(module, module + 'Grid');
-            
-            closeConfirmDialog();
-            deleteTarget = { module: null, id: null, title: '' };
-        }
-
-        // 关闭确认对话框
-        function closeConfirmDialog(e) {
-            if (!e || e.target.id === 'confirmOverlay') {
-                document.getElementById('confirmOverlay').classList.remove('active');
-            }
-        }
-
-        // 显示首页
-        function showHome() {
-            currentModule = null;
-            document.getElementById('homeSection').style.display = 'block';
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            updateNav('home');
-        }
-
-        // 显示模块
-        function showModule(module) {
-            currentModule = module;
-            document.getElementById('homeSection').style.display = 'none';
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(module + 'Section').classList.add('active');
-            updateNav(module);
-        }
-
-        // 更新导航
-        function updateNav(active) {
-            document.querySelectorAll('.nav-link').forEach((link, i) => {
-                link.classList.remove('active');
-                if ((active === 'home' && i === 0) || 
-                    (active === 'books' && i === 1) || 
-                    (active === 'history' && i === 2) || 
-                    (active === 'shanhaijing' && i === 3)) {
-                    link.classList.add('active');
-                }
+                board.appendChild(row);
+                shelf.appendChild(title);
+                shelf.appendChild(board);
+                container.appendChild(shelf);
             });
         }
 
-        // 筛选
-        function filterItems(module, tag) {
-            const container = document.getElementById(module + 'Grid');
-            const buttons = document.querySelectorAll('#' + module + 'Section .filter-chip');
+        // 创建书籍元素
+        function createBookElement(book) {
+            const bookDiv = document.createElement('div');
+            bookDiv.className = 'book';
+            bookDiv.onclick = () => openModal(book);
             
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent === (tag === 'all' ? '全部' : tag)) {
-                    btn.classList.add('active');
-                }
-            });
+            const stars = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
             
-            const items = tag === 'all' ? data[module] : data[module].filter(i => i.tag === tag);
-            
-            container.innerHTML = items.map(item => `
-                <div class="content-card" onclick="openPreview('${module}', ${item.id})">
-                    <div class="card-image ${module}">
-                        <span class="fallback-icon">${item.icon}</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">${item.tag}</span>
-                        <h3 class="card-title">${item.title}</h3>
-                        <p class="card-subtitle">${item.subtitle}</p>
-                        <p class="card-summary">${item.summary}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 搜索
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase();
-            if (!term) {
-                renderAll();
-                return;
-            }
-            
-            ['books', 'history', 'shanhaijing'].forEach(module => {
-                const container = document.getElementById(module + 'Grid');
-                const filtered = data[module].filter(i => 
-                    i.title.toLowerCase().includes(term) ||
-                    i.subtitle.toLowerCase().includes(term) ||
-                    i.summary.toLowerCase().includes(term)
-                );
-                container.innerHTML = filtered.map(item => `
-                    <div class="content-card" onclick="openPreview('${module}', ${item.id})">
-                        <div class="card-image ${module}">
-                            <span class="fallback-icon">${item.icon}</span>
-                        </div>
-                        <div class="card-body">
-                            <span class="card-tag">${item.tag}</span>
-                            <h3 class="card-title">${item.title}</h3>
-                            <p class="card-subtitle">${item.subtitle}</p>
-                            <p class="card-summary">${item.summary}</p>
-                        </div>
-                    </div>
-                `).join('');
-            });
-        });
-
-        // 显示导入结果
-        function showImportResult(message, type) {
-            const resultEl = document.getElementById('importResult');
-            if (resultEl) {
-                resultEl.innerHTML = message;
-                resultEl.className = 'import-result ' + type;
-                resultEl.style.display = 'block';
-
-                // 3秒后自动隐藏成功消息
-                if (type === 'success') {
-                    setTimeout(() => {
-                        if (resultEl) {
-                            resultEl.className = 'import-result';
-                        }
-                    }, 5000);
-                }
-            }
-        }
-
-        // 清空导入框（旧函数，保留兼容）
-        function clearImport() {
-            const textarea = document.getElementById('importTextarea');
-            const resultEl = document.getElementById('importResult');
-            if (textarea) textarea.value = '';
-            if (resultEl) {
-                resultEl.className = 'import-result';
-                resultEl.style.display = 'none';
-            }
-        }
-
-        // 显示模板（通用）
-        function showTemplate() {
-            const templates = {
-                books: {
-                    title: "书名（必填）",
-                    subtitle: "作者（必填）",
-                    englishTitle: "英文书名",
-                    tag: "文学",
-                    year: "1813",
-                    category: "浪漫主义文学",
-                    icon: "📖",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/book-cover.jpg",
-                    authorBackground: { name: "作者名", desc: "作者简介", motivation: ["创作动机1"] },
-                    keyPoints: [{ title: "核心观点1", content: "详细内容" }],
-                    chapters: [{ title: "章节1", content: "内容" }],
-                    quotes: [{ text: "金句", source: "出处" }],
-                    guide: ["实践建议1"],
-                    extended: [{ title: "延伸书名", author: "作者", desc: "简介" }]
-                },
-                history: {
-                    title: "人物名（必填）",
-                    subtitle: "人物身份/称号",
-                    tag: "三国",
-                    date: "2024-03",
-                    icon: "🎋",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/portrait.jpg",
-                    authorBackground: { name: "生卒年", desc: "人物简介", motivation: ["历史贡献1"] },
-                    keyPoints: [{ title: "主要成就1", content: "详细内容" }],
-                    chapters: [{ title: "生平阶段1", content: "内容" }],
-                    quotes: [{ text: "名言", source: "出处" }],
-                    guide: ["学习要点1"],
-                    extended: [{ title: "相关书籍", author: "作者", desc: "简介" }]
-                },
-                shanhaijing: {
-                    title: "神兽名（必填）",
-                    subtitle: "出处描述",
-                    tag: "异兽",
-                    date: "2024-06",
-                    icon: "🦊",
-                    summary: "一句话概括（必填）",
-                    coverImage: "https://example.com/creature.jpg",
-                    authorBackground: { name: "《山海经·XX经》", desc: "古籍简介", motivation: ["文化意义1"] },
-                    keyPoints: [{ title: "特征1", content: "详细描述" }],
-                    chapters: [{ title: "传说1", content: "内容" }],
-                    quotes: [{ text: "原文", source: "出处" }],
-                    guide: ["了解要点1"],
-                    extended: [{ title: "相关研究", author: "学者", desc: "简介" }]
-                }
-            };
-            
-            // 默认显示书籍模板
-            document.getElementById('templateContent').textContent = JSON.stringify(templates.books, null, 2);
-            document.getElementById('templateModal').classList.add('active');
-        }
-
-        // 复制模板
-        function copyTemplate() {
-            const content = document.getElementById('templateContent').textContent;
-            navigator.clipboard.writeText(content).then(() => {
-                alert('模板已复制到剪贴板！');
-            });
-        }
-
-        // 关闭模板弹窗
-        function closeTemplateModal(e) {
-            if (!e || e.target.id === 'templateModal') {
-                document.getElementById('templateModal').classList.remove('active');
-            }
-        }
-
-        // 导出数据
-        function exportData(module) {
-            const moduleNames = { books: 'books', history: 'history', shanhaijing: 'shanhaijing' };
-            const moduleLabels = { books: '书籍', history: '历史人物', shanhaijing: '山海经' };
-            const targetModule = module || 'books';
-            
-            const dataStr = JSON.stringify(data[targetModule], null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `zhixinglu-${moduleNames[targetModule]}-${new Date().toISOString().slice(0, 10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // 打开预览
-        function openPreview(module, id) {
-            const item = data[module].find(i => i.id === id);
-            if (!item) return;
-            
-            currentModule = module;
-            currentItemId = id;
-            
-            const titles = { books: '书籍预览', history: '人物预览', shanhaijing: '神兽预览' };
-            document.getElementById('modalTitle').textContent = titles[module];
-            
-            const isBook = module === 'books';
-            const hasImage = item.coverImage && item.coverImage.startsWith('data:image');
-            
-            document.getElementById('modalBody').innerHTML = `
-                <div class="preview-cover ${module}" style="${hasImage ? `background-image: url('${item.coverImage}'); background-size: cover; background-position: center;` : ''}">
-                    ${!hasImage ? `<span style="font-size: 3rem;">${item.icon}</span>` : ''}
-                </div>
-                <div class="preview-header">
-                    <h2 class="preview-title">${item.title}</h2>
-                    <p class="preview-subtitle">${item.subtitle}</p>
-                    <div class="preview-meta">
-                        ${isBook ? `<span>📅 ${item.year}</span><span>🏷️ ${item.category}</span>` : `<span>🏷️ ${item.tag}</span><span>📅 ${item.date}</span>`}
-                    </div>
-                </div>
-                <div class="preview-summary">${item.summary}</div>
-                <div class="preview-actions">
-                    <button class="btn-primary" onclick="openDetail()">查看完整内容</button>
-                    <button class="btn-secondary" onclick="closeModal()">关闭</button>
+            bookDiv.innerHTML = `
+                <div class="book-spine ${book.color}">
+                    <div class="book-title">${book.title}</div>
+                    <div class="book-author">${book.author}</div>
+                    <div class="book-rating">${stars}</div>
                 </div>
             `;
-            document.getElementById('modalOverlay').classList.add('active');
+            
+            return bookDiv;
+        }
+
+        // 打开弹窗
+        function openModal(book) {
+            document.getElementById('modalTitle').textContent = book.title;
+            document.getElementById('modalAuthor').textContent = book.author;
+            document.getElementById('modalDate').textContent = book.date;
+            document.getElementById('modalRating').textContent = '★'.repeat(book.rating) + '☆'.repeat(5 - book.rating);
+            document.getElementById('modalCategory').textContent = book.category;
+            document.getElementById('modalSummary').textContent = book.summary;
+            
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = book.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            
+            document.getElementById('bookModal').classList.add('active');
         }
 
         // 关闭弹窗
         function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        // 打开详情
-        function openDetail() {
-            closeModal();
-            const item = data[currentModule].find(i => i.id === currentItemId);
-            if (!item) return;
-            
-            const isBook = currentModule === 'books';
-            const hasDetailImage = item.coverImage && item.coverImage.startsWith('data:image');
-            
-            let html = `
-                <div class="detail-hero">
-                    <div class="detail-cover ${currentModule}" style="${hasDetailImage ? `background-image: url('${item.coverImage}'); background-size: cover; background-position: center;` : ''}">
-                        ${!hasDetailImage ? `<span style="font-size: 4rem;">${item.icon}</span>` : ''}
-                    </div>
-                    <div class="detail-hero-info">
-                        <h1 class="detail-hero-title">${item.title}</h1>
-                        <p class="detail-hero-subtitle">${item.subtitle}</p>
-                        <div class="detail-hero-meta">
-                            ${isBook ? `
-                                <span><strong>出版年份</strong>${item.year}</span>
-                                <span><strong>类别</strong>${item.category}</span>
-                            ` : `
-                                <span><strong>标签</strong>${item.tag}</span>
-                                <span><strong>日期</strong>${item.date}</span>
-                            `}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="detail-section">
-                    <h2 class="detail-section-title">一句话概括</h2>
-                    <p>${item.summary}</p>
-                </div>
-            `;
-            
-            if (item.authorBackground) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isBook ? '作者背景' : '出处背景'}</h2>
-                        <div class="detail-body">
-                            <p><strong>${item.authorBackground.name}</strong></p>
-                            <p>${item.authorBackground.desc}</p>
-                            ${item.authorBackground.motivation ? `
-                                <ul class="detail-points">
-                                    ${item.authorBackground.motivation.map(m => `
-                                        <li>
-                                            <div>
-                                                <div class="detail-point-content">${m}</div>
-                                            </div>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.keyPoints && item.keyPoints.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">核心观点</h2>
-                        <ul class="detail-points">
-                            ${item.keyPoints.map((point, i) => `
-                                <li>
-                                    <div>
-                                        <div class="detail-point-title">${point.title}</div>
-                                        <div class="detail-point-content">${point.content}</div>
-                                    </div>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            if (item.chapters && item.chapters.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">${isBook ? '章节梳理' : '内容梳理'}</h2>
-                        <div class="detail-chapters">
-                            ${item.chapters.map(chapter => `
-                                <div class="detail-chapter">
-                                    <div class="detail-chapter-title">${chapter.title}</div>
-                                    <div class="detail-chapter-content">${chapter.content}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.quotes && item.quotes.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">金句摘录</h2>
-                        <div class="detail-quotes">
-                            ${item.quotes.map(quote => `
-                                <div class="detail-quote">
-                                    <div class="detail-quote-text">"${quote.text}"</div>
-                                    <div class="detail-quote-source">—— ${quote.source}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.guide && item.guide.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">实践指南</h2>
-                        <div class="detail-guide">
-                            ${item.guide.map(g => `
-                                <div class="detail-guide-item">
-                                    <span class="detail-guide-check">✓</span>
-                                    <span>${g}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (item.extended && item.extended.length > 0) {
-                html += `
-                    <div class="detail-section">
-                        <h2 class="detail-section-title">延伸阅读</h2>
-                        <div class="detail-extended">
-                            ${item.extended.map(ext => `
-                                <div class="detail-extended-card">
-                                    <div class="detail-extended-title">${ext.title}</div>
-                                    <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">${ext.author}</div>
-                                    <div class="detail-extended-desc">${ext.desc}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            document.getElementById('detailContent').innerHTML = html;
-            document.getElementById('detailPage').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            window.scrollTo(0, 0);
-        }
-
-        // 关闭详情
-        function closeDetailPage() {
-            document.getElementById('detailPage').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // 切换主题
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+            document.getElementById('bookModal').classList.remove('active');
         }
 
         // 点击弹窗外部关闭
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        // ESC关闭
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
                 closeModal();
-                closeTemplateModal();
-                closeDetailPage();
             }
         });
 
-        // 启动
-        init();
+        // 筛选按钮事件
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                renderBookshelf();
+            });
+        });
+
+        // 搜索事件
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchTerm = this.value;
+            renderBookshelf();
+        });
+
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 初始化
+        updateStats();
+        renderBookshelf();
     </script>
 </body>
 </html>
