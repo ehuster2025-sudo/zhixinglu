@@ -1409,10 +1409,12 @@
         // 从 JSON 文件加载数据
         async function loadDataFromJSON() {
             try {
+                // 添加时间戳参数,强制绕过浏览器缓存
+                const timestamp = Date.now();
                 const [booksRes, historyRes, shanhaijingRes] = await Promise.all([
-                    fetch('./data/books.json'),
-                    fetch('./data/history.json'),
-                    fetch('./data/shanhaijing.json')
+                    fetch(`./data/books.json?t=${timestamp}`),
+                    fetch(`./data/history.json?t=${timestamp}`),
+                    fetch(`./data/shanhaijing.json?t=${timestamp}`)
                 ]);
                 
                 const data = {
