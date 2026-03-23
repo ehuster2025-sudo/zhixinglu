@@ -475,7 +475,6 @@
         }
 
         async function openDetail() {
-            closeModal();
             const item = data[currentModule].find(i => i.id === currentItemId);
             if (!item) return;
             
