@@ -2053,9 +2053,17 @@
             // 强制要求所有模块使用HTML格式
             if (item.contentFile) {
                 try {
-                    const response = await fetch(item.contentFile);
+                    // 添加时间戳参数绕过缓存
+                    const timestamp = Date.now();
+                    const contentFileUrl = item.contentFile.includes('?') 
+                        ? `${item.contentFile}&t=${timestamp}` 
+                        : `${item.contentFile}?t=${timestamp}`;
+                    
+                    console.log('Loading content file:', contentFileUrl);
+                    const response = await fetch(contentFileUrl);
                     const contentHtml = await response.text();
                     html += `<div class="detail-section">${contentHtml}</div>`;
+                    console.log('Content loaded successfully');
                 } catch (error) {
                     console.error('Failed to load content file:', error);
                     html += `<div class="detail-section"><p style="color: var(--error); text-align: center; padding: 2rem;">内容加载失败，请检查HTML文件路径是否正确</p></div>`;
