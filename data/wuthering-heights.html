@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《呼啸山庄》- 书籍摘要</title>
+    <style>
+        :root {
+            --bg-primary: #faf8f5;
+            --bg-secondary: #f5f2ed;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a5a;
+            --text-muted: #8a8a9a;
+            --accent-primary: #1a1a2e;
+            --accent-secondary: #8b7355;
+            --border: #e8e4df;
+            --shadow: 0 4px 12px -2px rgba(26, 26, 46, 0.08);
+            --shadow-lg: 0 12px 40px -8px rgba(26, 26, 46, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+        }
+
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .cover-image {
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .article-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-secondary);
+        }
+
+        .section-content {
+            line-height: 1.9;
+            color: var(--text-secondary);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-secondary);
+        }
+
+        .info-card-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .quote-block {
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.08) 0%, rgba(26, 26, 46, 0.03) 100%);
+            border-left: 4px solid var(--accent-secondary);
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .quote-text {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .quote-source {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: normal;
+        }
+
+        .highlight-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .concept-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .concept-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .concept-term {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-definition {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .article-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article class="article-container">
+        <!-- 文章头部 -->
+        <header class="article-header">
+            <h1 class="article-title">《呼啸山庄》</h1>
+            <p class="article-subtitle">Wuthering Heights</p>
+            <div class="article-meta">
+                <span>作者：艾米莉·勃朗特</span>
+                <span>出版年份：1847年</span>
+                <span>体裁：哥特式小说</span>
+            </div>
+        </header>
+
+        <!-- 封面图片 -->
+        <img src="./data/wuthering-heights-cover.jpg" alt="《呼啸山庄》书籍封面" class="cover-image">
+        <p class="image-caption">《呼啸山庄》经典版本封面</p>
+
+        <!-- 一句话概括 -->
+        <section class="article-section">
+            <h2 class="section-title">一句话概括</h2>
+            <div class="section-content">
+                <div class="highlight-box">
+                    <p class="highlight-content" style="font-size: 1.1rem; font-weight: 500; text-align: center;">
+                        一段跨越两代人的爱恨情仇，在荒原风暴中展开的复仇与救赎史诗。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心观点 -->
+        <section class="article-section">
+            <h2 class="section-title">核心观点</h2>
+            <div class="section-content">
+                <ul>
+                    <li>
+                        <strong>爱情的毁灭性力量</strong>：希斯克利夫与凯瑟琳的爱情超越了阶级与道德边界，最终演变为毁灭性的执念，揭示了激情若不加以约束将带来的灾难性后果。
+                    </li>
+                    <li>
+                        <strong>阶级与社会偏见</strong>：小说通过希斯克利夫因出身卑微而遭受的歧视，批判了维多利亚时代严苛的阶级制度对人性的扭曲与压迫。
+                    </li>
+                    <li>
+                        <strong>复仇的自我毁灭</strong>：希斯克利夫用一生策划复仇，最终发现复仇无法填补内心的空洞，反而使自己沦为仇恨的奴隶，体现了"以暴制暴"的虚无性。
+                    </li>
+                    <li>
+                        <strong>自然与文明的冲突</strong>：呼啸山庄代表原始、狂野的自然力量，画眉田庄象征文明与秩序，两者的对抗折射出人性中本能与理性的永恒张力。
+                    </li>
+                    <li>
+                        <strong>代际创伤与救赎</strong>：第一代的仇恨传递到第二代，最终通过小凯瑟琳与哈里顿的爱情实现和解，暗示爱与宽恕是打破仇恨循环的唯一途径。
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 主要内容 -->
+        <section class="article-section">
+            <h2 class="section-title">主要内容</h2>
+            <div class="section-content">
+                <p>
+                    小说采用嵌套叙事结构，通过房客洛克伍德的视角与女管家丁耐莉的回忆展开。故事发生在约克郡荒原上的两座庄园——呼啸山庄与画眉田庄。
+                </p>
+                <p>
+                    老恩肖从利物浦带回一个吉普赛弃儿希斯克利夫,引发家庭内部矛盾。希斯克利夫与恩肖之女凯瑟琳产生深厚感情,但在凯瑟琳决定嫁给画眉田庄少爷埃德加·林顿后,希斯克利夫愤然出走。三年后他致富归来,开始对两个家族展开系统性复仇：他诱骗伊莎贝拉·林顿私奔并虐待她,迫使凯瑟琳之子小林顿与自己的儿子结婚以夺取财产,最终导致凯瑟琳在痛苦中死去。
+                </p>
+                <p>
+                    希斯克利夫的复仇延续到第二代,他控制了呼啸山庄与画眉田庄,折磨哈里顿·恩肖与小林顿。然而在生命的最后阶段,他逐渐意识到复仇的空虚,最终在凯瑟琳的幽灵召唤下绝食而亡。小说以哈里顿与小凯瑟琳的爱情收束,象征着仇恨的终结与新生的开始。
+                </p>
+            </div>
+        </section>
+
+        <!-- 重要概念/术语 -->
+        <section class="article-section">
+            <h2 class="section-title">重要概念与象征</h2>
+            <div class="section-content">
+                <ul class="concept-list">
+                    <li class="concept-item">
+                        <div class="concept-term">呼啸山庄 (Wuthering Heights)</div>
+                        <div class="concept-definition">
+                            象征原始、野性、不受约束的自然力量。"Wuthering"是约克郡方言,意为"狂风呼啸的",暗示这里充满激情与混乱。山庄的环境严酷,居住者性格粗犷代表人性中本能的、未文明化的一面。
+                        </div>
+                    </li>
+                    <li class="concept-item">
+                        <div class="concept-term">画眉田庄 (Thrushcross Grange)</div>
+                        <div class="concept-definition">
+                            象征文明、秩序、社会规范与优雅生活。与呼啸山庄形成鲜明对比,田庄环境舒适宜人,居住者举止文雅,代表维多利亚时代中产阶级的理想生活方式,但也暗示其虚伪与软弱。
+                        </div>
+                    </li>
+                    <li class="concept-item">
+                        <div class="concept-term">荒原 (The Moors)</div>
+                        <div class="concept-definition">
+                            作为贯穿全书的自然背景,荒原象征自由、永恒与超越世俗的力量。它是希斯克利夫与凯瑟琳童年嬉戏之地,也是他们灵魂的归宿。荒原的荒凉与壮美映照人物内心的孤独与激情。
+                        </div>
+                    </li>
+                    <li class="concept-item">
+                        <div class="concept-term">鬼魂与超自然 (Ghosts & the Supernatural)</div>
+                        <div class="concept-definition">
+                            凯瑟琳的幽灵多次出现,既是哥特式小说的典型元素,也象征未完成的执念与无法安息的灵魂。鬼魂意象强化了爱情的超越性——即使死亡也无法割断希斯克利夫与凯瑟琳的精神纽带。
+                        </div>
+                    </li>
+                    <li class="concept-item">
+                        <div class="concept-term">嵌套叙事 (Frame Narrative)</div>
+                        <div class="concept-definition">
+                            小说采用多层叙述结构：洛克伍德记录丁耐莉的讲述,丁耐莉又是事件的见证者。这种叙事方式制造了距离感,使读者无法直接接触"真相",暗示了记忆的主观性与叙述的不可靠性。
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 核心论据/案例 -->
+        <section class="article-section">
+            <h2 class="section-title">核心论据与案例</h2>
+            <div class="section-content">
+                <div class="highlight-box">
+                    <div class="highlight-title">希斯克利夫的复仇逻辑</div>
+                    <div class="highlight-content">
+                        <p>小说通过希斯克利夫的系统性复仇计划,展现了仇恨如何扭曲人性。他不仅报复直接伤害他的人(亨德利·恩肖),更将仇恨延续到无辜的下一代(哈里顿、小林顿、小凯瑟琳)。这种"罪及子孙"的复仇模式揭示了仇恨的传染性与毁灭性。</p>
+                        <p>关键案例：希斯克利夫故意将哈里顿培养成粗鄙无知的人,重复自己童年被剥夺教育的命运,以此羞辱恩肖家族。然而这种刻意的残忍最终反噬自身——他发现自己越来越像曾经憎恨的亨德利。</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <div class="highlight-title">凯瑟琳的身份撕裂</div>
+                    <div class="highlight-content">
+                        <p>凯瑟琳接受埃德加的求婚是全书的转折点。她的经典独白"我就是希斯克利夫"揭示了灵魂层面的认同,但她同时承认嫁给希斯克利夫"会降低我的身份"。这种阶级意识与真实情感的冲突,直接导致了三人的悲剧命运。</p>
+                        <p>艾米莉·勃朗特通过凯瑟琳的困境,批判了维多利亚时代婚姻制度对女性情感自由的压迫——女性必须在社会地位与真实爱情之间做出残酷选择。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 金句摘录 -->
+        <section class="article-section">
+            <h2 class="section-title">金句摘录</h2>
+            <div class="section-content">
+                <div class="quote-block">
+                    <p class="quote-text">"无论我们的灵魂是什么做的,他的和我的是完全一样的。"</p>
+                    <p class="quote-source">—— 凯瑟琳·恩肖</p>
+                </div>
+
+                <div class="quote-block">
+                    <p class="quote-text">"他永远也不会知道我是多么爱他；那并不是因为他长得漂亮，而是因为他比我更像我自己。"</p>
+                    <p class="quote-source">—— 凯瑟琳·恩肖</p>
+                </div>
+
+                <div class="quote-block">
+                    <p class="quote-text">"我对林顿的爱像是林中的树叶，我很清楚，当冬天改变树叶的面目时，时光也会改变我的爱。我对希斯克利夫的爱恰似下面的恒久不变的岩石……"</p>
+                    <p class="quote-source">—— 凯瑟琳·恩肖</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 延伸阅读 -->
+        <section class="article-section">
+            <h2 class="section-title">延伸阅读</h2>
+            <div class="section-content">
+                <ul>
+                    <li>《简·爱》- 夏洛蒂·勃朗特（艾米莉的姐姐,同为维多利亚时代女性作家代表作）</li>
+                    <li>《阿格尼斯·格雷》- 安妮·勃朗特（勃朗特三姐妹中最小的妹妹）</li>
+                    <li>《理智与情感》- 简·奥斯汀（对比阅读：阶级与爱情的不同处理方式）</li>
+                    <li>《蝴蝶梦》- 达芙妮·杜穆里埃（哥特式爱情小说的现代继承）</li>
+                </ul>
+            </div>
+        </section>
+    </article>
+</body>
+</html>

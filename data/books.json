@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 1,
+        "title": "呼啸山庄",
+        "subtitle": "一部关于爱与复仇的哥特式经典",
+        "tag": "经典文学",
+        "year": 1847,
+        "category": "英国文学",
+        "icon": "
+        "coverImage": "./data/wuthering-heights-cover.jpg",
+        "summary": "艾米莉·勃朗特唯一的小说,讲述希斯克利夫与凯瑟琳跨越两代人的爱恨纠葛,以荒原为背景展现人性中最原始的情感力量。",
+        "contentFile": "./data/wuthering-heights.html"
+    }
+]
