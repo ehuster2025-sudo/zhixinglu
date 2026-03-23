@@ -8,6 +8,7 @@
         "icon": "🐺",
         "coverImage": "./data/qiongqi-cover.jpg",
         "summary": "《山海经》中记载的四大凶兽之一，形如牛（或虎）而有翼，最独特之处在于其'抑善扬恶'的反道德行为逻辑。",
+        "contentFile": "./data/qiongqi.html",
         "authorBackground": {
             "name": "《山海经·西山经》《海内北经》",
             "desc": "《山海经》是中国先秦时期的一部古籍。",

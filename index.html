@@ -2195,7 +2195,7 @@
         }
 
         // 打开详情
-        function openDetail() {
+        async function openDetail() {
             closeModal();
             const item = data[currentModule].find(i => i.id === currentItemId);
             if (!item) return;
@@ -2223,12 +2223,27 @@
                         </div>
                     </div>
                 </div>
-                
+            `;
+            
+            // 如果有外部HTML文件，加载它
+            if (item.contentFile) {
+                try {
+                    const response = await fetch(item.contentFile);
+                    const contentHtml = await response.text();
+                    html += `<div class="detail-section">${contentHtml}</div>`;
+                } catch (error) {
+                    console.error('Failed to load content file:', error);
+                    html += `<div class="detail-section"><p>内容加载失败</p></div>`;
+                }
+            } else {
+                // 使用原有的JSON字段渲染逻辑
+                html += `
                 <div class="detail-section">
                     <h2 class="detail-section-title">${isShanhaijing ? '基本信息' : '一句话概括'}</h2>
                     <p>${item.summary}</p>
                 </div>
-            `;
+                `;
+            }
             
             if (item.authorBackground) {
                 html += `
