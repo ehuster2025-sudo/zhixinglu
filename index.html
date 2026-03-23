@@ -1720,6 +1720,12 @@
             
             const textarea = document.getElementById('importTextarea');
             const resultEl = document.getElementById('importResult');
+            
+            if (!textarea || !resultEl) {
+                console.error('Import modal elements not found');
+                return;
+            }
+            
             const jsonStr = textarea.value.trim();
             
             if (!jsonStr) {
@@ -1814,10 +1820,15 @@
                 }
                 
             } catch (e) {
+                console.error('Import error:', e);
                 if (resultEl) {
-                    resultEl.innerHTML = 'JSON 格式错误: ' + e.message;
-                    resultEl.className = 'import-result error';
-                    resultEl.style.display = 'block';
+                    try {
+                        resultEl.innerHTML = 'JSON 格式错误: ' + e.message;
+                        resultEl.className = 'import-result error';
+                        resultEl.style.display = 'block';
+                    } catch (err) {
+                        console.error('Failed to show error:', err);
+                    }
                 }
             }
         }
