@@ -245,7 +245,7 @@
         }
 
         function showHome() {
-            document.getElementById('homeSection')?.style && (document.getElementById('homeSection').style.display = 'block');
+            document.querySelector('.hero').style.display = 'block';
             document.getElementById('modulesSection').style.display = 'block';
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
         }
