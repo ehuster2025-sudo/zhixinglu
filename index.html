@@ -441,17 +441,7 @@
         function showPreview(module, id) {
             currentModule = module;
             currentItemId = id;
-            const item = data[module].find(i => i.id === id);
-            if (!item) return;
-            
-            document.getElementById('modalCover').innerHTML = item.coverImage ? `<img src="${item.coverImage}" style="width:100%;height:100%;object-fit:cover;">` : item.icon;
-            document.getElementById('modalTitle').textContent = item.title;
-            document.getElementById('modalSubtitle').textContent = item.subtitle || '';
-            document.getElementById('modalMeta').innerHTML = module === 'books' ? 
-                `<span>📅 ${item.year}</span><span>🏷️ ${item.category}</span>` : 
-                `<span>🏷️ ${item.tag}</span><span>📅 ${item.date}</span>`;
-            document.getElementById('modalSummary').textContent = item.summary;
-            document.getElementById('modalOverlay').classList.add('active');
+            openDetail();
         }
 
         function closeModal(e) {
