@@ -210,6 +210,25 @@
             cursor: pointer;
             z-index: 310;
         }
+
+        .detail-nav {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            display: flex;
+            gap: 12px;
+            z-index: 310;
+        }
+
+        .detail-nav button {
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--bg-card);
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+        }
         .detail-hero { height: 300px; display: flex; align-items: center; justify-content: center; position: relative; }
         .detail-cover {
             position: absolute;
@@ -346,6 +365,10 @@
     </div>
 
     <div class="detail-overlay" id="detailOverlay">
+        <div class="detail-nav">
+            <button onclick="showHome()">🏠 首页</button>
+            <button onclick="goBack()">← 返回</button>
+        </div>
         <button class="detail-close" onclick="closeDetail()">✕</button>
         <div class="detail-hero">
             <div class="detail-cover" id="detailCover"></div>
@@ -363,6 +386,7 @@
         let currentModule = null;
         let currentItemId = null;
         let currentFilter = 'all';
+        let previousPage = null;
 
         async function loadData() {
             try {
@@ -422,6 +446,7 @@
         }
 
         function showModule(module) {
+            previousPage = 'home';
             currentModule = module;
             currentFilter = 'all';
             document.getElementById('homeSection').style.display = 'none';
@@ -513,6 +538,13 @@
         function closeDetail() {
             document.getElementById('detailOverlay').classList.remove('active');
             document.body.style.overflow = '';
+        }
+
+        function goBack() {
+            closeDetail();
+            if (previousPage === 'home' && currentModule) {
+                document.getElementById(currentModule + 'Section').classList.add('active');
+            }
         }
 
         function toggleTheme() {
