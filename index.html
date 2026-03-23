@@ -200,12 +200,20 @@
                     fetch(`./data/history.json?t=${ts}`),
                     fetch(`./data/shanhaijing.json?t=${ts}`)
                 ]);
-                data = { books: await br.json(), history: await hr.json(), shanhaijing: await sr.json() };
+                const books = await br.json();
+                const history = await hr.json();
+                const shanhaijing = await sr.json();
+                data = { books, history, shanhaijing };
+                console.log('Data loaded:', data);
                 renderAll();
-            } catch(e) { console.error('Load error:', e); }
+            } catch(e) { 
+                console.error('Load error:', e); 
+                alert('数据加载失败: ' + e.message);
+            }
         }
 
         function renderAll() {
+            console.log('renderAll called, data:', data);
             document.getElementById('booksCount').textContent = data.books.length;
             document.getElementById('historyCount').textContent = data.history.length;
             document.getElementById('shanhaijingCount').textContent = data.shanhaijing.length;
