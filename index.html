@@ -2271,7 +2271,25 @@
                 `;
             }
             
-            if (item.chapters && item.chapters.length > 0) {
+            // 山海经专属七段式架构
+            if (isShanhaijing && item.sections && item.sections.length > 0) {
+                // 使用新的七段式结构
+                item.sections.forEach(section => {
+                    html += `
+                        <div class="detail-section">
+                            <h2 class="detail-section-title">${section.title}</h2>
+                            <div class="detail-chapters">
+                                ${section.content.map(item => `
+                                    <div class="detail-chapter">
+                                        ${item.title ? `<div class="detail-chapter-title">${item.title}</div>` : ''}
+                                        <div class="detail-chapter-content">${item.content}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else if (item.chapters && item.chapters.length > 0) {
                 html += `
                     <div class="detail-section">
                         <h2 class="detail-section-title">${isShanhaijing ? '神异之处' : (isBook ? '章节梳理' : '内容梳理')}</h2>
