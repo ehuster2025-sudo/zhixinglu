@@ -35,75 +35,24 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text-primary); }
 
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 72px;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 48px;
-            z-index: 100;
-        }
-
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: var(--bg-primary); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; z-index: 100; }
         .logo { font-size: 1.5rem; font-weight: 600; }
-        .btn-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: var(--bg-secondary);
-            cursor: pointer;
-        }
+        .btn-icon { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--bg-secondary); cursor: pointer; }
 
         .main { padding-top: 72px; }
-
-        .hero {
-            padding: 80px 48px 60px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 0.9rem;
-            color: var(--accent-secondary);
-            margin-bottom: 24px;
-        }
-
+        .hero { padding: 80px 48px 60px; text-align: center; }
+        .hero-badge { display: inline-block; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; font-size: 0.9rem; color: var(--accent-secondary); margin-bottom: 24px; }
         .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 16px; }
         .hero p { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 40px; }
-
         .hero-stats { display: flex; justify-content: center; gap: 48px; }
         .hero-stat-value { font-size: 2rem; font-weight: 700; color: var(--accent-primary); }
         .hero-stat-label { font-size: 0.9rem; color: var(--text-muted); }
 
         .modules-section { padding: 40px 48px 80px; max-width: 1400px; margin: 0 auto; }
         .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-        .module-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
+        .module-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; text-align: center; cursor: pointer; transition: all 0.3s; }
         .module-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         .module-icon { font-size: 3rem; margin-bottom: 16px; }
         .module-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
@@ -113,29 +62,12 @@
         .content-section.active { display: block; }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
         .content-title { font-size: 1.75rem; font-weight: 600; }
-
         .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-        .filter-chip {
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
+        .filter-chip { padding: 8px 16px; border-radius: 100px; font-size: 0.9rem; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; }
         .filter-chip.active { background: var(--accent-primary); color: white; }
 
         .grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all 0.3s; }
         .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         .card-cover { height: 180px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
         .card-cover img { width: 100%; height: 100%; object-fit: cover; }
@@ -145,128 +77,21 @@
         .card-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; }
         .card-summary { font-size: 0.9rem; color: var(--text-muted); }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            padding: 24px;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            max-width: 700px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--bg-secondary);
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .preview-cover { height: 200px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
-        .preview-body { padding: 32px; }
-        .preview-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; }
-        .preview-subtitle { font-size: 1rem; color: var(--text-secondary); margin-bottom: 16px; }
-        .preview-meta { display: flex; gap: 16px; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-muted); }
-        .preview-summary { font-size: 1rem; line-height: 1.8; margin-bottom: 24px; }
-        .preview-actions { display: flex; gap: 12px; }
-        .btn-primary { flex: 1; padding: 14px 24px; border-radius: var(--radius); border: none; background: var(--accent-primary); color: white; font-size: 1rem; cursor: pointer; }
-        .btn-secondary { padding: 14px 24px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; }
-
-        .detail-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-primary);
-            z-index: 300;
-            overflow-y: auto;
-            display: none;
-        }
+        .detail-overlay { position: fixed; inset: 0; background: var(--bg-primary); z-index: 300; overflow-y: auto; display: none; }
         .detail-overlay.active { display: block; }
-        .detail-close {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: none;
-            background: var(--bg-card);
-            cursor: pointer;
-            z-index: 310;
-        }
-
-        .detail-nav {
-            position: fixed;
-            top: 24px;
-            left: 24px;
-            display: flex;
-            gap: 12px;
-            z-index: 310;
-        }
-
-        .detail-nav button {
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            border: none;
-            background: var(--bg-card);
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: var(--shadow);
-        }
+        .detail-nav { position: fixed; top: 24px; left: 24px; display: flex; gap: 12px; z-index: 310; }
+        .detail-nav button { padding: 12px 20px; border-radius: var(--radius); border: none; background: var(--bg-card); cursor: pointer; box-shadow: var(--shadow); }
+        .detail-close { position: fixed; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--bg-card); cursor: pointer; z-index: 310; }
         .detail-hero { height: 300px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .detail-cover {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8rem;
-            background: var(--bg-secondary);
-        }
+        .detail-cover { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8rem; background: var(--bg-secondary); }
         .detail-hero-info { position: relative; z-index: 2; text-align: center; }
         .detail-hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 12px; }
         .detail-hero-subtitle { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 16px; }
         .detail-hero-meta { display: flex; justify-content: center; gap: 24px; font-size: 0.95rem; color: var(--text-muted); }
         .detail-content { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
-
         .detail-section { margin-bottom: 40px; }
         .detail-section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: var(--accent-primary); }
         .detail-section > p { color: var(--text-secondary); line-height: 1.8; }
-        .detail-points { list-style: none; }
-        .detail-points li { background: var(--bg-card); padding: 16px 20px; margin-bottom: 12px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .detail-point-title { font-weight: 600; margin-bottom: 8px; color: var(--accent-secondary); }
-        .detail-point-content { color: var(--text-secondary); }
-        .detail-chapters { display: flex; flex-direction: column; gap: 20px; }
-        .detail-chapter { background: var(--bg-card); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .detail-chapter-title { font-weight: 600; margin-bottom: 12px; }
-        .detail-chapter-content { color: var(--text-secondary); }
-        .detail-quotes { display: flex; flex-direction: column; gap: 16px; }
-        .detail-quote { background: var(--bg-card); padding: 20px; border-radius: var(--radius); border-left: 4px solid var(--accent-secondary); }
-        .detail-quote-text { font-style: italic; margin-bottom: 8px; }
-        .detail-quote-source { font-size: 0.9rem; color: var(--text-muted); text-align: right; }
-        .detail-guide { display: flex; flex-direction: column; gap: 12px; }
-        .detail-guide-item { display: flex; align-items: center; gap: 12px; background: var(--bg-card); padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .detail-guide-check { color: var(--success); }
-        .detail-extended { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-        .detail-extended-card { background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .detail-extended-title { font-weight: 600; margin-bottom: 8px; }
-        .detail-extended-desc { font-size: 0.9rem; color: var(--text-secondary); }
 
         .empty-state { text-align: center; padding: 80px 24px; color: var(--text-muted); }
         .empty-state-icon { font-size: 4rem; margin-bottom: 16px; }
@@ -288,7 +113,7 @@
     </header>
 
     <main class="main">
-        <section class="hero" id="homeSection">
+        <section class="hero">
             <div class="hero-badge">✦ 知识汇聚 · 知行合一</div>
             <h1>探索知识的边界</h1>
             <p>在这里，阅读不仅是记录，更是与古今智者对话的旅程</p>
@@ -299,7 +124,7 @@
             </div>
         </section>
 
-        <section class="modules-section" id="modulesSection">
+        <section class="modules-section">
             <div class="modules-grid">
                 <div class="module-card" onclick="showModule('books')">
                     <div class="module-icon">📚</div>
@@ -322,7 +147,6 @@
         <section class="content-section" id="booksSection">
             <div class="content-header">
                 <h2 class="content-title">书籍摘要</h2>
-                <button class="btn-secondary" onclick="showHome()">← 返回</button>
             </div>
             <div class="filters" id="booksFilters"></div>
             <div class="grid-view" id="booksGrid"></div>
@@ -331,7 +155,6 @@
         <section class="content-section" id="historySection">
             <div class="content-header">
                 <h2 class="content-title">历史人物</h2>
-                <button class="btn-secondary" onclick="showHome()">← 返回</button>
             </div>
             <div class="filters" id="historyFilters"></div>
             <div class="grid-view" id="historyGrid"></div>
@@ -340,34 +163,16 @@
         <section class="content-section" id="shanhaijingSection">
             <div class="content-header">
                 <h2 class="content-title">山海经</h2>
-                <button class="btn-secondary" onclick="showHome()">← 返回</button>
             </div>
             <div class="filters" id="shanhaijingFilters"></div>
             <div class="grid-view" id="shanhaijingGrid"></div>
         </section>
     </main>
 
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div class="preview-cover" id="modalCover"></div>
-            <div class="preview-body">
-                <h2 class="preview-title" id="modalTitle"></h2>
-                <p class="preview-subtitle" id="modalSubtitle"></p>
-                <div class="preview-meta" id="modalMeta"></div>
-                <p class="preview-summary" id="modalSummary"></p>
-                <div class="preview-actions">
-                    <button class="btn-primary" onclick="openDetail()">查看完整内容</button>
-                    <button class="btn-secondary" onclick="closeModal()">关闭</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="detail-overlay" id="detailOverlay">
         <div class="detail-nav">
             <button onclick="showHome()">🏠 首页</button>
-            <button onclick="goBack()">← 返回</button>
+            <button onclick="closeDetail()">← 返回</button>
         </div>
         <button class="detail-close" onclick="closeDetail()">✕</button>
         <div class="detail-hero">
@@ -385,8 +190,7 @@
         let data = { books: [], history: [], shanhaijing: [] };
         let currentModule = null;
         let currentItemId = null;
-        let currentFilter = 'all';
-        let previousPage = null;
+        let moduleFilters = { books: 'all', history: 'all', shanhaijing: 'all' };
 
         async function loadData() {
             try {
@@ -413,18 +217,19 @@
         function renderGrid(module) {
             const grid = document.getElementById(module + 'Grid');
             const items = data[module];
-            const tags = [...new Set(items.map(i => i.tag).filter(Boolean))];
             
+            if (!items || !items.length) {
+                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>暂无内容</p></div>';
+                return;
+            }
+
+            const tags = [...new Set(items.map(i => i.tag).filter(Boolean))];
             const filters = document.getElementById(module + 'Filters');
             filters.innerHTML = `<span class="filter-chip active" onclick="filterItems('${module}', 'all')">全部</span>` + 
                 tags.map(t => `<span class="filter-chip" onclick="filterItems('${module}', '${t}')">${t}</span>`).join('');
             
-            let filtered = currentFilter === 'all' ? items : items.filter(i => i.tag === currentFilter);
-            
-            if (!filtered.length) {
-                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>暂无内容</p></div>';
-                return;
-            }
+            const currentFilter = moduleFilters[module];
+            const filtered = currentFilter === 'all' ? items : items.filter(i => i.tag === currentFilter);
             
             grid.innerHTML = filtered.map(item => `
                 <div class="card" onclick="showPreview('${module}', ${item.id})">
@@ -440,24 +245,20 @@
         }
 
         function showHome() {
-            document.getElementById('homeSection').style.display = 'block';
+            document.getElementById('homeSection')?.style && (document.getElementById('homeSection').style.display = 'block');
             document.getElementById('modulesSection').style.display = 'block';
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
         }
 
         function showModule(module) {
-            previousPage = 'home';
             currentModule = module;
-            currentFilter = 'all';
-            document.getElementById('homeSection').style.display = 'none';
             document.getElementById('modulesSection').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(module + 'Section').classList.add('active');
         }
 
         function filterItems(module, filter) {
-            currentModule = module;
-            currentFilter = filter;
+            moduleFilters[module] = filter;
             document.querySelectorAll(`#${module}Filters .filter-chip`).forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
             renderGrid(module);
@@ -467,11 +268,6 @@
             currentModule = module;
             currentItemId = id;
             openDetail();
-        }
-
-        function closeModal(e) {
-            if (e && e.target !== e.currentTarget) return;
-            document.getElementById('modalOverlay').classList.remove('active');
         }
 
         async function openDetail() {
@@ -488,17 +284,14 @@
             
             let html = `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '一句话概括' : '基本信息'}</h2><p>${item.summary}</p></div>`;
             
-            // Load HTML file if exists
             if (item.contentFile) {
                 try {
                     const response = await fetch(item.contentFile);
                     const contentHtml = await response.text();
                     html += `<div class="detail-section">${contentHtml}</div>`;
                 } catch(e) {
-                    html += addDefaultContent(item, isBook);
+                    console.error('Failed to load content:', e);
                 }
-            } else {
-                html += addDefaultContent(item, isBook);
             }
             
             document.getElementById('detailContent').innerHTML = html;
@@ -506,44 +299,9 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function addDefaultContent(item, isBook) {
-            let html = '';
-            if (item.authorBackground) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '作者背景' : '出处背景'}</h2><p><strong>${item.authorBackground.name}</strong></p><p>${item.authorBackground.desc}</p></div>`;
-            }
-            if (item.keyPoints?.length) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '核心观点' : '形象描绘'}</h2><ul class="detail-points">` + 
-                    item.keyPoints.map(p => `<li><div class="detail-point-title">${p.title}</div><div class="detail-point-content">${p.content}</div></li>`).join('') + `</ul></div>`;
-            }
-            if (item.chapters?.length) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '章节梳理' : '内容梳理'}</h2><div class="detail-chapters">` + 
-                    item.chapters.map(c => `<div class="detail-chapter"><div class="detail-chapter-title">${c.title}</div><div class="detail-chapter-content">${c.content}</div></div>`).join('') + `</div></div>`;
-            }
-            if (item.quotes?.length) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">金句摘录</h2><div class="detail-quotes">` + 
-                    item.quotes.map(q => `<div class="detail-quote"><div class="detail-quote-text">"${q.text}"</div><div class="detail-quote-source">—— ${q.source}</div></div>`).join('') + `</div></div>`;
-            }
-            if (item.guide?.length) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">实践指南</h2><div class="detail-guide">` + 
-                    item.guide.map(g => `<div class="detail-guide-item"><span class="detail-guide-check">✓</span><span>${g}</span></div>`).join('') + `</div></div>`;
-            }
-            if (item.extended?.length) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">延伸阅读</h2><div class="detail-extended">` + 
-                    item.extended.map(e => `<div class="detail-extended-card"><div class="detail-extended-title">${e.title}</div><div style="color:var(--text-muted);font-size:0.9rem;margin-bottom:8px;">${e.author}</div><div class="detail-extended-desc">${e.desc}</div></div>`).join('') + `</div></div>`;
-            }
-            return html;
-        }
-
         function closeDetail() {
             document.getElementById('detailOverlay').classList.remove('active');
             document.body.style.overflow = '';
-        }
-
-        function goBack() {
-            closeDetail();
-            if (previousPage === 'home' && currentModule) {
-                document.getElementById(currentModule + 'Section').classList.add('active');
-            }
         }
 
         function toggleTheme() {
