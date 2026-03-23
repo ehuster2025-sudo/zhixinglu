@@ -1802,11 +1802,13 @@
 
         // 显示模块
         function showModule(module) {
+            console.log('showModule called:', module);
             currentModule = module;
             document.getElementById('homeSection').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(module + 'Section').classList.add('active');
             updateNav(module);
+            filterItems(module, 'all');
         }
 
         // 更新导航
