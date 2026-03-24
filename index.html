@@ -96,8 +96,9 @@
         .empty-state { text-align: center; padding: 80px 24px; color: var(--text-muted); }
         .empty-state-icon { font-size: 4rem; margin-bottom: 16px; }
 
-        @media (max-width: 768px) {
-            .header { padding: 0 24px; }
+        .section-nav { padding: 16px 48px; }
+        .section-nav button { padding: 8px 16px; border-radius: 8px; border: none; background: var(--bg-secondary); cursor: pointer; font-size: 0.9rem; }
+        @media (max-width: 768px) { .section-nav { padding: 16px 24px; }
             .hero { padding: 60px 24px 40px; }
             .hero h1 { font-size: 2.5rem; }
             .modules-section { padding: 40px 24px; }
@@ -145,6 +146,9 @@
         </section>
 
         <section class="content-section" id="booksSection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
             <div class="content-header">
                 <h2 class="content-title">书籍摘要</h2>
             </div>
@@ -153,6 +157,9 @@
         </section>
 
         <section class="content-section" id="historySection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
             <div class="content-header">
                 <h2 class="content-title">历史人物</h2>
             </div>
@@ -161,6 +168,9 @@
         </section>
 
         <section class="content-section" id="shanhaijingSection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
             <div class="content-header">
                 <h2 class="content-title">山海经</h2>
             </div>
