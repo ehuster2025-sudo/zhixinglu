@@ -9,7 +9,7 @@
         "icon": "📖",
         "coverImage": "./data/wuthering-heights-cover.jpg",
         "summary": "一部关于爱与复仇的哥特式小说，讲述希斯克利夫与凯瑟琳两代人之间的激情、痛苦与救赎的故事。",
-        "contentFile": "./data/wuthering-heights.html",
+        "contentFile": null,
         "authorBackground": {
             "name": "艾米莉·勃朗特（Emily Brontë，1818-1848）",
             "desc": "英国著名作家，勃朗三姐妹之一。《呼啸山庄》是她唯一的小说，却奠定了她在世界文学史上的地位。",
@@ -102,7 +102,7 @@
         "icon": "📖",
         "coverImage": "./data/pride-prejudice-cover.jpg",
         "summary": "一部关于爱情与婚姻的讽刺小说，通过伊丽莎白与达西的情感纠葛，揭示了傲慢与偏见如何阻碍人们获得真正的幸福。",
-        "contentFile": "./data/pride-prejudice.html",
+        "contentFile": null,
         "authorBackground": {
             "name": "简·奥斯汀（Jane Austen，1775-1817）",
             "desc": "英国著名小说家，被誉为'语言大师'和'女性小说家'。她的作品对后世产生了深远影响。",
@@ -199,7 +199,7 @@
         "icon": "📖",
         "coverImage": "./data/war-and-peace-cover.jpg",
         "summary": "一部描绘19世纪初俄法战争的史诗巨著，通过四大贵族家庭的兴衰，展现了战争与和平、个人与命运、爱情与死亡的宏大画卷。",
-        "contentFile": "./data/war-and-peace.html",
+        "contentFile": null,
         "authorBackground": {
             "name": "列夫·托尔斯泰（Leo Tolstoy，1828-1910）",
             "desc": "俄国最伟大的作家之一，被誉为'俄国革命的镜子'。他的作品深刻影响了世界文学和思想史。",
@@ -292,7 +292,7 @@
         "icon": "📖",
         "coverImage": "./data/great-gatsby-cover.jpg",
         "summary": "一部关于'美国梦'破灭的深刻寓言，通过神秘富豪盖茨比的悲剧故事，揭示了20世纪20年代美国社会的虚荣与幻灭。",
-        "contentFile": "./data/great-gatsby.html",
+        "contentFile": null,
         "authorBackground": {
             "name": "F·司各特·菲茨杰拉德（F. Scott Fitzgerald，1896-1940）",
             "desc": "美国'迷惘的一代'代表作家，被誉为'爵士时代'的桂冠诗人。他的作品深刻描绘了美国梦的辉煌与失落。",
@@ -385,7 +385,7 @@
         "icon": "📖",
         "coverImage": "./data/notre-dame-cover.jpg",
         "summary": "一部关于美与丑、真与假、爱情与牺牲的永恒悲剧，通过巴黎圣母院敲钟人卡西莫多的故事，展现了人性的光辉与社会的黑暗。",
-        "contentFile": "./data/notre-dame.html",
+        "contentFile": null,
         "authorBackground": {
             "name": "维克多·雨果（Victor Hugo，1802-1885）",
             "desc": "法国浪漫主义文学运动的领袖，被称为'法兰西的莎士比亚'。他的作品深刻影响了19世纪文学和思想。",
