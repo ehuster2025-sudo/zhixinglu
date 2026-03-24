@@ -9,15 +9,22 @@
             --bg-primary: #f7f7f7;
             --bg-secondary: #f0f0f0;
             --bg-card: #fff;
-            --text-primary: #333;
-            --text-secondary: #666;
-            --text-muted: #999;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #888888;
             --accent-primary: #e50914;
             --accent-secondary: #ff8c00;
+            --accent-highlight: #c4a77d;
             --border: #e0e0e0;
             --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
             --radius: 4px;
             --radius-lg: 8px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
         }
 
         [data-theme="dark"] {
@@ -66,7 +73,7 @@
 
         .grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: all 0.2s; }
-        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
         .card-cover { height: 240px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .card-cover img { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 16px; }
@@ -102,6 +109,13 @@
         .section-nav button { padding: 6px 12px; border-radius: var(--radius); border: none; background: var(--bg-card); cursor: pointer; font-size: 0.8rem; box-shadow: var(--shadow); }
         .section-nav button:hover { background: var(--accent-primary); color: white; }
 
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero-stats { flex-wrap: wrap; gap: 16px; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .grid-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .card-cover { height: 160px; }
+        }
         @media (max-width: 768px) {
             .header { padding: 0 16px; }
             .hero { padding: 30px 16px 20px; }
@@ -115,6 +129,22 @@
             .detail-hero { height: 220px; }
             .detail-hero-title { font-size: 1.5rem; }
         }
+
+        /* Loading skeleton */
+        .skeleton { background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-primary) 50%, var(--bg-secondary) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        
+        /* Focus styles for accessibility */
+        button:focus-visible, .card:focus-visible, .module-card:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+        
+        /* Image fallback */
+        .card-cover img { background: var(--bg-secondary); }
+        .card-cover img.onerror { display: none; }
+        .card-cover.error { background: var(--bg-secondary); }
+        .card-cover.error::before { content: attr(data-icon); font-size: 3rem; }
     </style>
 </head>
 <body>
@@ -137,17 +167,17 @@
 
         <section class="modules-section" id="modulesSection">
             <div class="modules-grid">
-                <div class="module-card" onclick="showModule('books')">
+                <div class="module-card" tabindex="0" onclick="showModule('books')" onkeydown="if(event.key==='Enter')showModule('books')">
                     <div class="module-icon">📚</div>
                     <h3>书籍摘要</h3>
                     <p>记录每一本读过的书，收藏思想的火花</p>
                 </div>
-                <div class="module-card" onclick="showModule('history')">
+                <div class="module-card" tabindex="0" onclick="showModule('history')" onkeydown="if(event.key==='Enter')showModule('history')">
                     <div class="module-icon">🏛️</div>
                     <h3>历史人物</h3>
                     <p>以人为镜，可以明得失</p>
                 </div>
-                <div class="module-card" onclick="showModule('shanhaijing')">
+                <div class="module-card" tabindex="0" onclick="showModule('shanhaijing')" onkeydown="if(event.key==='Enter')showModule('shanhaijing')">
                     <div class="module-icon">🐉</div>
                     <h3>山海经</h3>
                     <p>探索上古神话，领略东方奇幻</p>
@@ -214,6 +244,7 @@
 
         async function loadData() {
             try {
+                showLoading(true);
                 const ts = Date.now();
                 const [br, hr, sr] = await Promise.all([
                     fetch(`./data/books.json?t=${ts}`),
@@ -226,9 +257,18 @@
                 data = { books, history, shanhaijing };
                 console.log('Data loaded:', data);
                 renderAll();
+                showLoading(false);
             } catch(e) { 
                 console.error('Load error:', e); 
+                showLoading(false);
                 alert('数据加载失败: ' + e.message);
+            }
+        }
+        
+        function showLoading(show) {
+            const hero = document.querySelector('.hero-stats');
+            if(show) {
+                hero.innerHTML = '<div class="skeleton" style="width:200px;height:24px;border-radius:4px;"></div>';
             }
         }
 
@@ -260,8 +300,8 @@
             const filtered = currentFilter === 'all' ? items : items.filter(i => i.tag === currentFilter);
             
             grid.innerHTML = filtered.map(item => `
-                <div class="card" onclick="showPreview('${module}', ${item.id})">
-                    <div class="card-cover">${item.coverImage ? `<img src="${item.coverImage}">` : item.icon}</div>
+                <div class="card" tabindex="0" onclick="showPreview('${module}', ${item.id})" onkeydown="if(event.key==='Enter')showPreview('${module}',${item.id})">
+                    <div class="card-cover">${item.coverImage ? `<img src="${item.coverImage}" onerror="this.classList.add('onerror');this.parentElement.classList.add('error');this.parentElement.setAttribute('data-icon','${item.icon}')">` : item.icon}</div>
                     <div class="card-body">
                         <div class="card-tag">${item.tag || ''}</div>
                         <h3 class="card-title">${item.title}</h3>
