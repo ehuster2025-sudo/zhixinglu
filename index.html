@@ -58,7 +58,7 @@
         .module-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
         .module-card p { color: var(--text-secondary); }
 
-        .content-section { padding: 0 48px 80px; max-width: 1400px; margin: 0 auto; display: none; }
+        .content-section { padding: 80px 48px 80px; max-width: 1400px; margin: 0 auto; display: none; }
         .content-section.active { display: block; }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
         .content-title { font-size: 1.75rem; font-weight: 600; }
@@ -99,14 +99,15 @@
         .empty-state { text-align: center; padding: 80px 24px; color: var(--text-muted); }
         .empty-state-icon { font-size: 4rem; margin-bottom: 16px; }
 
-        .section-nav { padding: 16px 48px; }
-        .section-nav button { padding: 8px 16px; border-radius: 8px; border: none; background: var(--bg-secondary); cursor: pointer; font-size: 0.9rem; }
+        .section-nav { position: fixed; top: 80px; left: 24px; z-index: 50; }
+        .section-nav button { padding: 8px 16px; border-radius: 8px; border: none; background: var(--bg-card); cursor: pointer; font-size: 0.9rem; box-shadow: var(--shadow); }
         @media (max-width: 768px) { .section-nav { padding: 16px 24px; }
             .hero { padding: 60px 24px 40px; }
             .hero h1 { font-size: 2.5rem; }
             .modules-section { padding: 40px 24px; }
             .modules-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); min-width: auto; }
-            .content-section { padding: 0 24px 60px; }
+            .content-section { padding: 80px 24px 60px; }
+            .section-nav { top: 72px; left: 16px; }
         }
 
         /* Button interactions */
