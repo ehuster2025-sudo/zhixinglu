@@ -145,6 +145,7 @@
         .card-cover img.onerror { display: none; }
         .card-cover.error { background: var(--bg-secondary); }
         .card-cover.error::before { content: attr(data-icon); font-size: 3rem; }
+.module-count { font-size: 0.85rem; color: var(--accent-secondary); font-weight: 400; }
     </style>
 </head>
 <body>
@@ -158,28 +159,23 @@
             <div class="hero-badge">✦ 知识汇聚 · 知行合一</div>
             <h1>探索知识的边界</h1>
             <p>在这里，阅读不仅是记录，更是与古今智者对话的旅程</p>
-            <div class="hero-stats">
-                <div><div class="hero-stat-value" id="booksCount">0</div><div class="hero-stat-label">书籍</div></div>
-                <div><div class="hero-stat-value" id="historyCount">0</div><div class="hero-stat-label">人物</div></div>
-                <div><div class="hero-stat-value" id="shanhaijingCount">0</div><div class="hero-stat-label">神兽</div></div>
-            </div>
         </section>
 
         <section class="modules-section" id="modulesSection">
             <div class="modules-grid">
                 <div class="module-card" tabindex="0" onclick="showModule('books')" onkeydown="if(event.key==='Enter')showModule('books')">
                     <div class="module-icon">📚</div>
-                    <h3>书籍摘要</h3>
+                    <h3>书籍摘要 <span class="module-count" id="booksCount">(0)</span></h3>
                     <p>记录每一本读过的书，收藏思想的火花</p>
                 </div>
                 <div class="module-card" tabindex="0" onclick="showModule('history')" onkeydown="if(event.key==='Enter')showModule('history')">
                     <div class="module-icon">🏛️</div>
-                    <h3>历史人物</h3>
+                    <h3>历史人物 <span class="module-count" id="historyCount">(0)</span></h3>
                     <p>以人为镜，可以明得失</p>
                 </div>
                 <div class="module-card" tabindex="0" onclick="showModule('shanhaijing')" onkeydown="if(event.key==='Enter')showModule('shanhaijing')">
                     <div class="module-icon">🐉</div>
-                    <h3>山海经</h3>
+                    <h3>山海经 <span class="module-count" id="shanhaijingCount">(0)</span></h3>
                     <p>探索上古神话，领略东方奇幻</p>
                 </div>
             </div>
@@ -272,9 +268,13 @@
         function renderAll() {
             console.log('renderAll called, data:', data);
             if (!data) return;
-            if (document.getElementById('booksCount')) document.getElementById('booksCount').textContent = data.books?.length || 0;
-            if (document.getElementById('historyCount')) document.getElementById('historyCount').textContent = data.history?.length || 0;
-            if (document.getElementById('shanhaijingCount')) document.getElementById('shanhaijingCount').textContent = data.shanhaijing?.length || 0;
+            // 更新模块卡片上的数量
+            const booksCount = document.getElementById('booksCount');
+            if (booksCount) booksCount.textContent = `(${data.books?.length || 0})`;
+            const historyCount = document.getElementById('historyCount');
+            if (historyCount) historyCount.textContent = `(${data.history?.length || 0})`;
+            const shanhaijingCount = document.getElementById('shanhaijingCount');
+            if (shanhaijingCount) shanhaijingCount.textContent = `(${data.shanhaijing?.length || 0})`;
             renderGrid('books');
             renderGrid('history');
             renderGrid('shanhaijing');
