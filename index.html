@@ -266,17 +266,15 @@
         }
         
         function showLoading(show) {
-            const hero = document.querySelector('.hero-stats');
-            if(show) {
-                hero.innerHTML = '<div class="skeleton" style="width:200px;height:24px;border-radius:4px;"></div>';
-            }
+            // Loading state handled by browser
         }
 
         function renderAll() {
             console.log('renderAll called, data:', data);
-            document.getElementById('booksCount').textContent = data.books.length;
-            document.getElementById('historyCount').textContent = data.history.length;
-            document.getElementById('shanhaijingCount').textContent = data.shanhaijing.length;
+            if (!data) return;
+            if (document.getElementById('booksCount')) document.getElementById('booksCount').textContent = data.books?.length || 0;
+            if (document.getElementById('historyCount')) document.getElementById('historyCount').textContent = data.history?.length || 0;
+            if (document.getElementById('shanhaijingCount')) document.getElementById('shanhaijingCount').textContent = data.shanhaijing?.length || 0;
             renderGrid('books');
             renderGrid('history');
             renderGrid('shanhaijing');
