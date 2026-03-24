@@ -84,10 +84,13 @@
         .detail-close { position: fixed; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--bg-card); cursor: pointer; z-index: 310; }
         .detail-hero { height: 300px; display: flex; align-items: center; justify-content: center; position: relative; }
         .detail-cover { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8rem; background: var(--bg-secondary); }
+        .detail-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)); }
+        .detail-cover img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        .detail-hero-info { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .detail-hero-info { position: relative; z-index: 2; text-align: center; }
-        .detail-hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 12px; }
-        .detail-hero-subtitle { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 16px; }
-        .detail-hero-meta { display: flex; justify-content: center; gap: 24px; font-size: 0.95rem; color: var(--text-muted); }
+        .detail-hero-title { font-size: 3rem; font-weight: 700; margin-bottom: 12px; color: #fff; }
+        .detail-hero-subtitle { font-size: 1.25rem; color: rgba(255,255,255,0.9); margin-bottom: 16px; }
+        .detail-hero-meta { display: flex; justify-content: center; gap: 24px; font-size: 0.95rem; color: rgba(255,255,255,0.8); }
         .detail-content { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
         .detail-section { margin-bottom: 40px; }
         .detail-section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: var(--accent-primary); }
