@@ -105,6 +105,35 @@
             .modules-grid { grid-template-columns: 1fr; }
             .content-section { padding: 0 24px 60px; }
         }
+
+        /* Button interactions */
+        button { transition: all 0.2s ease; }
+        button:hover { transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+        
+        .btn-icon:hover { background: var(--border); }
+        
+        .module-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .module-card:active { transform: scale(0.98); }
+        
+        .card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card:active { transform: scale(0.98); }
+        
+        .filter-chip { transition: all 0.2s ease; }
+        .filter-chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        
+        .detail-nav button { transition: all 0.2s ease; }
+        .detail-nav button:hover { background: var(--accent-primary); color: white; }
+        
+        .section-nav button { transition: all 0.2s ease; }
+        .section-nav button:hover { background: var(--accent-primary); color: white; }
+        
+        .logo { transition: transform 0.2s ease; }
+        .logo:hover { transform: scale(1.02); }
+        
+        .detail-close { transition: all 0.2s ease; }
+        .detail-close:hover { background: #ff4444; color: white; }
+
     </style>
 </head>
 <body>
