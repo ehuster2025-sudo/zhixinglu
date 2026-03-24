@@ -146,6 +146,24 @@
         .card-cover.error { background: var(--bg-secondary); }
         .card-cover.error::before { content: attr(data-icon); font-size: 3rem; }
 .module-count { font-size: 0.85rem; color: var(--accent-secondary); font-weight: 400; }
+
+        .book-summary { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); }
+        .author-info { background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); }
+        .key-points { display: flex; flex-direction: column; gap: 16px; }
+        .key-point-item { display: flex; gap: 12px; align-items: flex-start; }
+        .point-num { width: 28px; height: 28px; background: var(--accent-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .point-content h4 { margin-bottom: 6px; font-size: 1rem; }
+        .point-content p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .chapters-list { display: flex; flex-direction: column; gap: 20px; }
+        .chapter-item { border-left: 3px solid var(--accent-primary); padding-left: 16px; }
+        .chapter-item h4 { margin-bottom: 8px; font-size: 1rem; color: var(--text-primary); }
+        .chapter-item p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .quotes-list { display: flex; flex-direction: column; gap: 16px; }
+        .quote-item { background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); }
+        .quote-item blockquote { font-style: italic; color: var(--text-primary); margin-bottom: 8px; line-height: 1.7; }
+        .quote-item cite { color: var(--text-muted); font-size: 0.9rem; }
+        .guide-list { padding-left: 20px; }
+        .guide-list li { color: var(--text-secondary); margin-bottom: 8px; line-height: 1.7; }
     </style>
 </head>
 <body>
@@ -348,43 +366,77 @@
                 `<span><strong>年份</strong>${item.year}</span><span><strong>类别</strong>${item.category}</span>` : 
                 `<span><strong>标签</strong>${item.tag}</span><span><strong>日期</strong>${item.date}</span>`;
             
-            let html = `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '书籍简介' : '基本信息'}</h2><p>${item.summary}</p></div>`;
+            let html = '';
             
-            // 显示作者信息
+            // 书籍简介
+            if (item.summary) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📖 书籍简介</h2>
+                    <p class="book-summary">${item.summary}</p>
+                </div>`;
+            }
+            
+            // 作者介绍
             if (item.authorBackground) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">作者介绍</h2><p><strong>${item.authorBackground.name}</strong></p><p>${item.authorBackground.desc}</p></div>`;
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">👤 作者介绍</h2>
+                    <div class="author-info">
+                        <p><strong>${item.authorBackground.name}</strong></p>
+                        <p>${item.authorBackground.desc}</p>
+                    </div>
+                </div>`;
             }
             
-            // 显示关键要点
+            // 核心要点
             if (item.keyPoints && item.keyPoints.length > 0) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">核心要点</h2>`;
-                item.keyPoints.forEach(kp => {
-                    html += `<p><strong>${kp.title}</strong></p><p>${kp.content}</p>`;
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">💡 核心要点</h2>
+                    <div class="key-points">`;
+                item.keyPoints.forEach((kp, idx) => {
+                    html += `<div class="key-point-item">
+                        <span class="point-num">${idx + 1}</span>
+                        <div class="point-content">
+                            <h4>${kp.title}</h4>
+                            <p>${kp.content}</p>
+                        </div>
+                    </div>`;
                 });
-                html += `</div>`;
+                html += `</div></div>`;
             }
             
-            // 显示章节简介
+            // 章节简介
             if (item.chapters && item.chapters.length > 0) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">章节简介</h2>`;
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📑 章节简介</h2>
+                    <div class="chapters-list">`;
                 item.chapters.forEach(ch => {
-                    html += `<p><strong>${ch.title}</strong></p><p>${ch.content}</p>`;
+                    html += `<div class="chapter-item">
+                        <h4>${ch.title}</h4>
+                        <p>${ch.content}</p>
+                    </div>`;
                 });
-                html += `</div>`;
+                html += `</div></div>`;
             }
             
-            // 显示名言警句
+            // 名言警句
             if (item.quotes && item.quotes.length > 0) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">名言警句</h2>`;
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">💬 名言警句</h2>
+                    <div class="quotes-list">`;
                 item.quotes.forEach(q => {
-                    html += `<p>"${q.text}"</p><p style="color:var(--text-muted);font-size:0.9em;">—— ${q.source}</p>`;
+                    html += `<div class="quote-item">
+                        <blockquote>"${q.text}"</blockquote>
+                        <cite>—— ${q.source}</cite>
+                    </div>`;
                 });
-                html += `</div>`;
+                html += `</div></div>`;
             }
             
-            // 显示阅读指南
+            // 阅读指南
             if (item.guide && item.guide.length > 0) {
-                html += `<div class="detail-section"><h2 class="detail-section-title">阅读指南</h2><ul>`;
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📝 阅读指南</h2>
+                    <ul class="guide-list">`;
                 item.guide.forEach(g => {
                     html += `<li>${g}</li>`;
                 });
