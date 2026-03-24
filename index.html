@@ -348,16 +348,47 @@
                 `<span><strong>年份</strong>${item.year}</span><span><strong>类别</strong>${item.category}</span>` : 
                 `<span><strong>标签</strong>${item.tag}</span><span><strong>日期</strong>${item.date}</span>`;
             
-            let html = `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '一句话概括' : '基本信息'}</h2><p>${item.summary}</p></div>`;
+            let html = `<div class="detail-section"><h2 class="detail-section-title">${isBook ? '书籍简介' : '基本信息'}</h2><p>${item.summary}</p></div>`;
             
-            if (item.contentFile) {
-                try {
-                    const response = await fetch(item.contentFile);
-                    const contentHtml = await response.text();
-                    html += `<div class="detail-section">${contentHtml}</div>`;
-                } catch(e) {
-                    console.error('Failed to load content:', e);
-                }
+            // 显示作者信息
+            if (item.authorBackground) {
+                html += `<div class="detail-section"><h2 class="detail-section-title">作者介绍</h2><p><strong>${item.authorBackground.name}</strong></p><p>${item.authorBackground.desc}</p></div>`;
+            }
+            
+            // 显示关键要点
+            if (item.keyPoints && item.keyPoints.length > 0) {
+                html += `<div class="detail-section"><h2 class="detail-section-title">核心要点</h2>`;
+                item.keyPoints.forEach(kp => {
+                    html += `<p><strong>${kp.title}</strong></p><p>${kp.content}</p>`;
+                });
+                html += `</div>`;
+            }
+            
+            // 显示章节简介
+            if (item.chapters && item.chapters.length > 0) {
+                html += `<div class="detail-section"><h2 class="detail-section-title">章节简介</h2>`;
+                item.chapters.forEach(ch => {
+                    html += `<p><strong>${ch.title}</strong></p><p>${ch.content}</p>`;
+                });
+                html += `</div>`;
+            }
+            
+            // 显示名言警句
+            if (item.quotes && item.quotes.length > 0) {
+                html += `<div class="detail-section"><h2 class="detail-section-title">名言警句</h2>`;
+                item.quotes.forEach(q => {
+                    html += `<p>"${q.text}"</p><p style="color:var(--text-muted);font-size:0.9em;">—— ${q.source}</p>`;
+                });
+                html += `</div>`;
+            }
+            
+            // 显示阅读指南
+            if (item.guide && item.guide.length > 0) {
+                html += `<div class="detail-section"><h2 class="detail-section-title">阅读指南</h2><ul>`;
+                item.guide.forEach(g => {
+                    html += `<li>${g}</li>`;
+                });
+                html += `</ul></div>`;
             }
             
             document.getElementById('detailContent').innerHTML = html;
