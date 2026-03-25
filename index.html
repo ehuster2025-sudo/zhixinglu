@@ -59,11 +59,37 @@
 
         .modules-section { padding: 20px 24px 40px; max-width: 900px; margin: 0 auto; }
         .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .module-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .module-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 20px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+        .module-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            z-index: 0;
+        }
+        .module-card.books-bg::before { background-image: url('./data/书籍摘要.png'); }
+        .module-card.history-bg::before { background-image: url('./data/历史人物.png'); }
+        .module-card.shanhaijing-bg::before { background-image: url('./data/山海经.png'); }
         .module-card:hover { border-color: var(--accent-primary); box-shadow: var(--shadow); }
-        .module-icon { font-size: 1.8rem; margin-bottom: 8px; }
-        .module-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
-        .module-card p { font-size: 0.8rem; color: var(--text-muted); }
+        .module-icon { font-size: 1.8rem; margin-bottom: 8px; position: relative; z-index: 1; }
+        .module-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 4px; position: relative; z-index: 1; color: var(--text-primary); }
+        .module-card p { font-size: 0.8rem; color: var(--text-muted); position: relative; z-index: 1; }
 
         .content-section { padding: 80px 24px 40px; max-width: 900px; margin: 0 auto; display: none; }
         .content-section.active { display: block; }
@@ -189,18 +215,18 @@
 
         <section class="modules-section" id="modulesSection">
             <div class="modules-grid">
-                <div class="module-card" tabindex="0" onclick="showModule('books')" onkeydown="if(event.key==='Enter')showModule('books')">
-                    <div class="module-icon"><img src="./data/书籍摘要.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;"></div>
+                <div class="module-card books-bg" tabindex="0" onclick="showModule('books')" onkeydown="if(event.key==='Enter')showModule('books')">
+                    <div class="module-icon"></div>
                     <h3>书籍摘要 <span class="module-count" id="booksCount">(0)</span></h3>
                     <p>记录每一本读过的书，收藏思想的火花</p>
                 </div>
-                <div class="module-card" tabindex="0" onclick="showModule('history')" onkeydown="if(event.key==='Enter')showModule('history')">
-                    <div class="module-icon"><img src="./data/历史人物.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;"></div>
+                <div class="module-card history-bg" tabindex="0" onclick="showModule('history')" onkeydown="if(event.key==='Enter')showModule('history')">
+                    <div class="module-icon"></div>
                     <h3>历史人物 <span class="module-count" id="historyCount">(0)</span></h3>
                     <p>以人为镜，可以明得失</p>
                 </div>
-                <div class="module-card" tabindex="0" onclick="showModule('shanhaijing')" onkeydown="if(event.key==='Enter')showModule('shanhaijing')">
-                    <div class="module-icon"><img src="./data/山海经.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;"></div>
+                <div class="module-card shanhaijing-bg" tabindex="0" onclick="showModule('shanhaijing')" onkeydown="if(event.key==='Enter')showModule('shanhaijing')">
+                    <div class="module-icon"></div>
                     <h3>山海经 <span class="module-count" id="shanhaijingCount">(0)</span></h3>
                     <p>探索上古神话，领略东方奇幻</p>
                 </div>
