@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知行录 - 知行合一</title>
+        <style>
+        :root {
+            --bg-primary: #f7f7f7;
+            --bg-secondary: #f0f0f0;
+            --bg-card: #fff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #888888;
+            --accent-primary: #e50914;
+            --accent-secondary: #ff8c00;
+            --accent-highlight: #c4a77d;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+            --radius: 4px;
+            --radius-lg: 8px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-card: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaa;
+            --text-muted: #777;
+            --accent-primary: #ff6b6b;
+            --border: #444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 100; box-shadow: var(--shadow); }
+        .logo { font-size: 1.2rem; font-weight: 600; color: var(--accent-primary); cursor: pointer; }
+        .logo span { color: var(--text-primary); font-weight: 400; }
+        .btn-icon { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-secondary); cursor: pointer; font-size: 0.9rem; }
+
+        .main { padding-top: 56px; }
+        .hero { padding: 40px 24px 30px; text-align: center; background: var(--bg-card); border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .hero-badge { display: inline-block; padding: 4px 12px; background: var(--accent-primary); color: white; border-radius: 2px; font-size: 0.75rem; margin-bottom: 12px; }
+        .hero h1 { font-size: 1.8rem; font-weight: 500; margin-bottom: 8px; }
+        .hero p { font-size: 0.9rem; color: var(--text-secondary); }
+        .hero-stats { display: flex; justify-content: center; gap: 32px; margin-top: 20px; }
+        .hero-stat-value { font-size: 1.4rem; font-weight: 600; color: var(--accent-secondary); }
+        .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); }
+
+        .modules-section { padding: 20px 24px 40px; max-width: 900px; margin: 0 auto; }
+        .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .module-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .module-card:hover { border-color: var(--accent-primary); box-shadow: var(--shadow); }
+        .module-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .module-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
+        .module-card p { font-size: 0.8rem; color: var(--text-muted); }
+
+        .content-section { padding: 80px 24px 40px; max-width: 900px; margin: 0 auto; display: none; }
+        .content-section.active { display: block; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .content-title { font-size: 1.2rem; font-weight: 500; }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .filter-chip { padding: 4px 12px; font-size: 0.8rem; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; border-radius: 2px; }
+        .filter-chip.active { background: var(--accent-primary); color: white; border-color: var(--accent-primary); }
+
+        .grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: all 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .card-cover { height: 240px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .card-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 16px; }
+        .card-tag { font-size: 0.7rem; color: var(--accent-secondary); margin-bottom: 4px; }
+        .card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-summary { font-size: 0.8rem; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .detail-overlay { position: fixed; inset: 0; background: var(--bg-primary); z-index: 300; overflow-y: auto; display: none; }
+        .detail-overlay.active { display: block; }
+        .detail-nav { position: fixed; top: 16px; left: 16px; display: flex; gap: 8px; z-index: 310; }
+        .detail-nav button { padding: 6px 12px; border-radius: var(--radius); border: none; background: var(--bg-card); cursor: pointer; font-size: 0.8rem; box-shadow: var(--shadow); }
+        .detail-nav button:hover { background: var(--accent-primary); color: white; }
+        .detail-close { position: fixed; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-card); cursor: pointer; z-index: 310; font-size: 1rem; }
+        .detail-close:hover { background: #ff4444; color: white; }
+        .detail-hero { height: 280px; display: flex; align-items: center; justify-content: center; position: relative; background: var(--bg-secondary); }
+        .detail-cover { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+        .detail-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)); }
+        .detail-cover img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        .detail-hero-info { position: relative; z-index: 2; text-align: center; }
+        .detail-hero-title { font-size: 2rem; font-weight: 600; margin-bottom: 8px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .detail-hero-subtitle { font-size: 1rem; color: rgba(255,255,255,0.9); margin-bottom: 12px; }
+        .detail-hero-meta { display: flex; justify-content: center; gap: 16px; font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+        .detail-content { max-width: 700px; margin: 0 auto; padding: 32px 24px 60px; }
+        .detail-section { margin-bottom: 28px; }
+        .detail-section-title { font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--accent-primary); border-left: 3px solid var(--accent-primary); padding-left: 10px; }
+        .detail-section > p { color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; }
+
+        .empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
+
+        .section-nav { position: fixed; top: 72px; left: 16px; z-index: 50; }
+        .section-nav button { padding: 6px 12px; border-radius: var(--radius); border: none; background: var(--bg-card); cursor: pointer; font-size: 0.8rem; box-shadow: var(--shadow); }
+        .section-nav button:hover { background: var(--accent-primary); color: white; }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero-stats { flex-wrap: wrap; gap: 16px; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .grid-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .card-cover { height: 160px; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 0 16px; }
+            .hero { padding: 30px 16px 20px; }
+            .hero h1 { font-size: 1.5rem; }
+            .modules-section { padding: 16px; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .content-section { padding: 80px 16px 30px; }
+            .grid-view { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+            .card-cover { height: 180px; }
+            .section-nav { top: 64px; left: 12px; }
+            .detail-hero { height: 220px; }
+            .detail-hero-title { font-size: 1.5rem; }
+        }
+
+        /* Loading skeleton */
+        .skeleton { background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-primary) 50%, var(--bg-secondary) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        
+        /* Focus styles for accessibility */
+        button:focus-visible, .card:focus-visible, .module-card:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+        
+        /* Image fallback */
+        .card-cover img { background: var(--bg-secondary); }
+        .card-cover img.onerror { display: none; }
+        .card-cover.error { background: var(--bg-secondary); }
+        .card-cover.error::before { content: attr(data-icon); font-size: 3rem; }
+.module-count { font-size: 0.85rem; color: var(--accent-secondary); font-weight: 400; }
+
+        .book-summary { font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); }
+        .author-info { background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); }
+        .key-points { display: flex; flex-direction: column; gap: 16px; }
+        .key-point-item { display: flex; gap: 12px; align-items: flex-start; }
+        .point-num { width: 28px; height: 28px; background: var(--accent-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .point-content h4 { margin-bottom: 6px; font-size: 1rem; }
+        .point-content p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .chapters-list { display: flex; flex-direction: column; gap: 20px; }
+        .chapter-item { border-left: 3px solid var(--accent-primary); padding-left: 16px; }
+        .chapter-item h4 { margin-bottom: 8px; font-size: 1rem; color: var(--text-primary); }
+        .chapter-item p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .quotes-list { display: flex; flex-direction: column; gap: 16px; }
+        .quote-item { background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); }
+        .quote-item blockquote { font-style: italic; color: var(--text-primary); margin-bottom: 8px; line-height: 1.7; }
+        .quote-item cite { color: var(--text-muted); font-size: 0.9rem; }
+        .guide-list { padding-left: 20px; }
+        .guide-list li { color: var(--text-secondary); margin-bottom: 8px; line-height: 1.7; }
+
+        .character-map { display: flex; flex-direction: column; gap: 12px; }
+        .relation-item { display: grid; grid-template-columns: 1fr auto 1fr 2fr; gap: 12px; align-items: center; padding: 10px; background: var(--bg-secondary); border-radius: var(--radius); }
+        .rel-from, .rel-to { font-weight: 500; text-align: center; }
+        .rel-arrow { color: var(--accent-primary); font-weight: 600; font-size: 0.85rem; }
+        .rel-desc { color: var(--text-muted); font-size: 0.85rem; text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo" onclick="showHome()" style="cursor:pointer">✦ 知行录</div>
+        <button class="btn-icon" onclick="toggleTheme()">🌓</button>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="hero-badge">✦ 知识汇聚 · 知行合一</div>
+            <h1>探索知识的边界</h1>
+            <p>在这里，阅读不仅是记录，更是与古今智者对话的旅程</p>
+        </section>
+
+        <section class="modules-section" id="modulesSection">
+            <div class="modules-grid">
+                <div class="module-card" tabindex="0" onclick="showModule('books')" onkeydown="if(event.key==='Enter')showModule('books')">
+                    <div class="module-icon">📚</div>
+                    <h3>书籍摘要 <span class="module-count" id="booksCount">(0)</span></h3>
+                    <p>记录每一本读过的书，收藏思想的火花</p>
+                </div>
+                <div class="module-card" tabindex="0" onclick="showModule('history')" onkeydown="if(event.key==='Enter')showModule('history')">
+                    <div class="module-icon">🏛️</div>
+                    <h3>历史人物 <span class="module-count" id="historyCount">(0)</span></h3>
+                    <p>以人为镜，可以明得失</p>
+                </div>
+                <div class="module-card" tabindex="0" onclick="showModule('shanhaijing')" onkeydown="if(event.key==='Enter')showModule('shanhaijing')">
+                    <div class="module-icon">🐉</div>
+                    <h3>山海经 <span class="module-count" id="shanhaijingCount">(0)</span></h3>
+                    <p>探索上古神话，领略东方奇幻</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="booksSection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
+            <div class="content-header">
+                <h2 class="content-title">书籍摘要</h2>
+            </div>
+            <div class="filters" id="booksFilters"></div>
+            <div class="grid-view" id="booksGrid"></div>
+        </section>
+
+        <section class="content-section" id="historySection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
+            <div class="content-header">
+                <h2 class="content-title">历史人物</h2>
+            </div>
+            <div class="filters" id="historyFilters"></div>
+            <div class="grid-view" id="historyGrid"></div>
+        </section>
+
+        <section class="content-section" id="shanhaijingSection">
+            <div class="section-nav">
+                <button onclick="showHome()">← 首页</button>
+            </div>
+            <div class="content-header">
+                <h2 class="content-title">山海经</h2>
+            </div>
+            <div class="filters" id="shanhaijingFilters"></div>
+            <div class="grid-view" id="shanhaijingGrid"></div>
+        </section>
+    </main>
+
+    <div class="detail-overlay" id="detailOverlay">
+        <div class="detail-nav">
+            <button onclick="showHome()">🏠 首页</button>
+            <button onclick="closeDetail()">← 返回</button>
+        </div>
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <div class="detail-hero">
+            <div class="detail-cover" id="detailCover"></div>
+            <div class="detail-hero-info">
+                <h1 class="detail-hero-title" id="detailTitle"></h1>
+                <p class="detail-hero-subtitle" id="detailSubtitle"></p>
+                <div class="detail-hero-meta" id="detailMeta"></div>
+            </div>
+        </div>
+        <div class="detail-content" id="detailContent"></div>
+    </div>
+
+    <script>
+        let data = { books: [], history: [], shanhaijing: [] };
+        let currentModule = null;
+        let currentItemId = null;
+        let moduleFilters = { books: 'all', history: 'all', shanhaijing: 'all' };
+
+        async function loadData() {
+            try {
+                showLoading(true);
+                const ts = Date.now();
+                const [br, hr, sr] = await Promise.all([
+                    fetch(`./data/books.json?t=${ts}`),
+                    fetch(`./data/history.json?t=${ts}`),
+                    fetch(`./data/shanhaijing.json?t=${ts}`)
+                ]);
+                const books = await br.json();
+                const history = await hr.json();
+                const shanhaijing = await sr.json();
+                data = { books, history, shanhaijing };
+                console.log('Data loaded:', data);
+                renderAll();
+                showLoading(false);
+            } catch(e) { 
+                console.error('Load error:', e); 
+                showLoading(false);
+                alert('数据加载失败: ' + e.message);
+            }
+        }
+        
+        function showLoading(show) {
+            // Loading state handled by browser
+        }
+
+        function renderAll() {
+            console.log('renderAll called, data:', data);
+            if (!data) return;
+            // 更新模块卡片上的数量
+            const booksCount = document.getElementById('booksCount');
+            if (booksCount) booksCount.textContent = `(${data.books?.length || 0})`;
+            const historyCount = document.getElementById('historyCount');
+            if (historyCount) historyCount.textContent = `(${data.history?.length || 0})`;
+            const shanhaijingCount = document.getElementById('shanhaijingCount');
+            if (shanhaijingCount) shanhaijingCount.textContent = `(${data.shanhaijing?.length || 0})`;
+            renderGrid('books');
+            renderGrid('history');
+            renderGrid('shanhaijing');
+        }
+
+        function renderGrid(module) {
+            const grid = document.getElementById(module + 'Grid');
+            const items = data[module];
+            
+            if (!items || !items.length) {
+                grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>暂无内容</p></div>';
+                return;
+            }
+
+            const tags = [...new Set(items.map(i => i.tag).filter(Boolean))];
+            const filters = document.getElementById(module + 'Filters');
+            filters.innerHTML = `<span class="filter-chip active" onclick="filterItems('${module}', 'all')">全部</span>` + 
+                tags.map(t => `<span class="filter-chip" onclick="filterItems('${module}', '${t}')">${t}</span>`).join('');
+            
+            const currentFilter = moduleFilters[module];
+            const filtered = currentFilter === 'all' ? items : items.filter(i => i.tag === currentFilter);
+            
+            grid.innerHTML = filtered.map(item => `
+                <div class="card" tabindex="0" onclick="showPreview('${module}', ${item.id})" onkeydown="if(event.key==='Enter')showPreview('${module}',${item.id})">
+                    <div class="card-cover">${item.coverImage ? `<img src="${item.coverImage}" onerror="this.classList.add('onerror');this.parentElement.classList.add('error');this.parentElement.setAttribute('data-icon','${item.icon}')">` : item.icon}</div>
+                    <div class="card-body">
+                        <div class="card-tag">${item.tag || ''}</div>
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-subtitle">${item.subtitle || ''}</p>
+                        <p class="card-summary">${item.summary || ''}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showHome() {
+            closeDetail();
+            document.querySelector('.hero').style.display = 'block';
+            document.getElementById('modulesSection').style.display = 'block';
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        }
+
+        function showModule(module) {
+            currentModule = module;
+            document.getElementById('modulesSection').style.display = 'none';
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(module + 'Section').classList.add('active');
+        }
+
+        function filterItems(module, filter) {
+            moduleFilters[module] = filter;
+            document.querySelectorAll(`#${module}Filters .filter-chip`).forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            renderGrid(module);
+        }
+
+        function showPreview(module, id) {
+            currentModule = module;
+            currentItemId = id;
+            openDetail();
+        }
+
+        async function openDetail() {
+            const item = data[currentModule].find(i => i.id === currentItemId);
+            if (!item) return;
+            
+            const isBook = currentModule === 'books';
+            document.getElementById('detailCover').innerHTML = item.coverImage ? `<img src="${item.coverImage}" style="width:100%;height:100%;object-fit:cover;">` : item.icon;
+            document.getElementById('detailTitle').textContent = item.title;
+            document.getElementById('detailSubtitle').textContent = item.subtitle || '';
+            document.getElementById('detailMeta').innerHTML = isBook ? 
+                `<span><strong>年份</strong>${item.year}</span><span><strong>类别</strong>${item.category}</span>` : 
+                `<span><strong>标签</strong>${item.tag}</span><span><strong>日期</strong>${item.date}</span>`;
+            
+            let html = '';
+            
+            // 书籍简介
+            if (item.summary) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📖 书籍简介</h2>
+                    <p class="book-summary">${item.summary}</p>
+                </div>`;
+            }
+            
+            // 作者介绍
+            if (item.authorBackground) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">👤 作者介绍</h2>
+                    <div class="author-info">
+                        <p><strong>${item.authorBackground.name}</strong></p>
+                        <p>${item.authorBackground.desc}</p>
+                    </div>
+                </div>`;
+            }
+            
+            // 核心要点
+            if (item.keyPoints && item.keyPoints.length > 0) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">💡 核心要点</h2>
+                    <div class="key-points">`;
+                item.keyPoints.forEach((kp, idx) => {
+                    html += `<div class="key-point-item">
+                        <span class="point-num">${idx + 1}</span>
+                        <div class="point-content">
+                            <h4>${kp.title}</h4>
+                            <p>${kp.content}</p>
+                        </div>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+            
+            // 章节简介
+            if (item.chapters && item.chapters.length > 0) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📑 章节简介</h2>
+                    <div class="chapters-list">`;
+                item.chapters.forEach(ch => {
+                    html += `<div class="chapter-item">
+                        <h4>${ch.title}</h4>
+                        <p>${ch.content}</p>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+            
+            // 名言警句
+            if (item.quotes && item.quotes.length > 0) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">💬 名言警句</h2>
+                    <div class="quotes-list">`;
+                item.quotes.forEach(q => {
+                    html += `<div class="quote-item">
+                        <blockquote>"${q.text}"</blockquote>
+                        <cite>—— ${q.source}</cite>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+            
+            // 阅读指南
+            if (item.guide && item.guide.length > 0) {
+                html += `<div class="detail-section">
+                    <h2 class="detail-section-title">📝 阅读指南</h2>
+                    <ul class="guide-list">`;
+                item.guide.forEach(g => {
+                    html += `<li>${g}</li>`;
+                });
+                html += `</ul></div>`;
+            }
+            
+            document.getElementById('detailContent').innerHTML = html;
+            document.getElementById('detailOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detailOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
